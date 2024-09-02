@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     "crispy_bootstrap5",
     "django_htmx",
     "django_celery_results",
+    "phonenumber_field",
+    "djmoney",
 ]
 
 MIDDLEWARE = [
