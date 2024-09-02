@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from phonenumber_field.modelfields import PhoneNumberField
 from djmoney.models.fields import MoneyField
 
+
 # Create your models here.
 
 "Abstract User Profile class for both customer and driver to inherit from."
@@ -20,6 +21,10 @@ class UserProfile(models.Model):
 
 
 class Customer(UserProfile):
+    class Meta:
+        permissions = [
+            ("can_place_delivery", "Can place delivery orders"),
+        ]
     class ContactChoice(models.TextChoices):
         MOBILE = "Phone Call"
         EMAIL = "Email"
@@ -33,6 +38,10 @@ class Customer(UserProfile):
 
 
 class Driver(UserProfile):
+    class Meta:
+        permissions = [
+            ("can_deliver", "Can deliver orders"),
+        ]
     class Vehicle(models.TextChoices):
 
         PICKUP = "Pickup Truck"
