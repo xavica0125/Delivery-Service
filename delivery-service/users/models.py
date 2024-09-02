@@ -91,10 +91,10 @@ class DeliveryLocation(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
 
 
-"""Model stores delivery location physical address and references DeliveryLocation instance via foreign key."
+"""Model stores delivery location physical address and references DeliveryLocation instance via foreign key."""
 class DeliveryLocationAddress(models.Model):
     street_address = models.CharField(max_length=15,)
     city = models.CharField(max_length=15,)
     state = models.CharField(max_length=15,default="TX")
-    zip_code = USZipCodeField()
-"""
+    zip_code = models.PositiveIntegerField()
+
