@@ -61,18 +61,4 @@ def logout(request):
     return redirect("login")
 
 
-# User Preferences view that saves the user Preferencess to the database
-@login_required(login_url="/")
-def set_user_preferences(request):
-    obj, created = Preferences.objects.get_or_create(user=request.user)
-    if request.method == "POST":
-        form = UserPreferences(request.POST or None, instance=obj)
-        if form.is_valid():
-            form.save()
-            messages.success(request, ("Success! You have updated your Preferences."))
-            return redirect("home")
-        else:
-            messages.error(request, ("There was an error with processing your form."))
-    else:
-        form = UserPreferences(request.POST or None, instance=obj)
-    return render(request, "user_preferences.html", {"form": form})
+

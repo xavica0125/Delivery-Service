@@ -19,7 +19,7 @@ from crispy_forms.layout import (
     MultiField,
 )
 from crispy_bootstrap5.bootstrap5 import FloatingField
-from news_aggregator_web.settings import EMAIL_HOST_USER
+from delivery_service.settings import EMAIL_HOST_USER
 from django.contrib.sites.shortcuts import get_current_site
 from django.contrib.auth.tokens import default_token_generator
 from .task import send_password_reset_email

@@ -4,9 +4,9 @@ from celery import Celery
 from django.conf import settings
 
 # Set the default Django settings module for the 'celery' program.
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "news_aggregator_web.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "delivery_service.settings")
 
-app = Celery("news_aggregator_web")  # Replace 'your_project' with your project's name.
+app = Celery("delivery_service")  # Replace 'your_project' with your project's name.
 
 # Configure Celery using settings from Django settings.py.
 app.config_from_object("django.conf:settings", namespace="CELERY")
