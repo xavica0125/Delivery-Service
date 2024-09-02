@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
-from .forms import CreateUserForm, LoginForm, UserPreferences
+from .forms import CreateUserForm, LoginForm
 from .models import *
 from django.contrib.auth.decorators import login_required
 from django_htmx.http import retarget, HttpResponseClientRedirect
@@ -59,6 +59,3 @@ def logout(request):
     auth_logout(request)
     messages.success(request, "Logout successful!")
     return redirect("login")
-
-
-

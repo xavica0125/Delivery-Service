@@ -6,7 +6,6 @@ from django.contrib.auth.forms import (
     SetPasswordForm,
 )
 from django.contrib.auth.models import User
-from users.models import Preferences
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import (
     Submit,
@@ -200,7 +199,7 @@ class Password_Reset_Confirm(SetPasswordForm):
 """User preferences form that allows the user to select their preferences based off of the categories in Preferences model."""
 
 
-class UserPreferences(forms.ModelForm):
+"""class UserPreferences(forms.ModelForm):
     class Meta:
         model = Preferences
         fields = [
@@ -231,4 +230,4 @@ class UserPreferences(forms.ModelForm):
                 Submit("submit", "Submit", css_class="btn btn-primary"),
                 css_class="d-grid gap-2 d-md-flex justify-content-md-end",
             ),
-        )
+        )"""
