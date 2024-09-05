@@ -25,6 +25,7 @@ class Customer(UserProfile):
         permissions = [
             ("can_place_delivery", "Can place delivery orders"),
         ]
+
     class ContactChoice(models.TextChoices):
         MOBILE = "Phone Call"
         EMAIL = "Email"
@@ -32,7 +33,14 @@ class Customer(UserProfile):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     notification_preference = models.CharField(max_length=15, choices=ContactChoice)
     date_created = models.DateTimeField(auto_now_add=True)
-
+    street_address = models.CharField(
+        max_length=15,
+    )
+    city = models.CharField(
+        max_length=15,
+    )
+    state = models.CharField(max_length=15, default="TX")
+    zip_code = models.PositiveIntegerField()
 
 """Driver model that holds relevant information. Relationship with User model is defined as OneToOneField using user_id as the primary key/foreign key."""
 
@@ -42,6 +50,7 @@ class Driver(UserProfile):
         permissions = [
             ("can_deliver", "Can deliver orders"),
         ]
+
     class Vehicle(models.TextChoices):
 
         PICKUP = "Pickup Truck"
@@ -65,6 +74,12 @@ class Order(models.Model):
         TWO_HOUR = "2 Hour"
         FOUR_HOUR = "4 Hour"
 
+    class Status(models.TextChoices):
+        PENDING = "Pending"
+        EN_ROUTE = "En Route"
+        DELIVERED = "Delivered"
+        REFUSED = "Refused"
+
     control_number = models.BigAutoField(primary_key=True)
     weight = models.PositiveIntegerField()
     time_window = models.CharField(
@@ -76,7 +91,8 @@ class Order(models.Model):
     date_picked_up = models.DateTimeField(null=True)
     date_delivered = models.DateTimeField(null=True)
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
-
+    order_status = models.CharField(max_length=15, choices=Status)
+    reason_for_refusal = models.TextField(max_length=200, blank=True)
 
 """Model that stores reference numbers used by customers and are associated via foreign key with the Order model's primary key."""
 
@@ -101,9 +117,14 @@ class DeliveryLocation(models.Model):
 
 
 """Model stores delivery location physical address and references DeliveryLocation instance via foreign key."""
-class DeliveryLocationAddress(models.Model):
-    street_address = models.CharField(max_length=15,)
-    city = models.CharField(max_length=15,)
-    state = models.CharField(max_length=15,default="TX")
-    zip_code = models.PositiveIntegerField()
 
+
+class DeliveryLocationAddress(models.Model):
+    street_address = models.CharField(
+        max_length=15,
+    )
+    city = models.CharField(
+        max_length=15,
+    )
+    state = models.CharField(max_length=15, default="TX")
+    zip_code = models.PositiveIntegerField()
