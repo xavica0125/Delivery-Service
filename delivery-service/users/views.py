@@ -17,6 +17,7 @@ def register(request):
             username = form.cleaned_data.get("username")
             password1 = form.cleaned_data.get("password1")
             user = authenticate(request, username=username, password=password1)
+            form.create_customer(user)
             if user is not None:
                 auth_login(request, user)
                 messages.success(request, "Registration successful!")

@@ -22,6 +22,7 @@ from delivery_service.settings import EMAIL_HOST_USER
 from django.contrib.sites.shortcuts import get_current_site
 from django.contrib.auth.tokens import default_token_generator
 from .task import send_password_reset_email
+from .models import Customer
 
 """User registration form that extends the UserCreationForm from Django's auth module. The form includes fields for first name, last name, email, username, and password."""
 
@@ -59,7 +60,7 @@ class CreateUserForm(UserCreationForm):
                 FloatingField("last_name"),
                 FloatingField("username"),
                 FloatingField("email"),
-                FloatingField("phone_number"),
+                FloatingField("phone_number"), #TODO phone number formatting is now always applied
                 FloatingField("password1"),
                 FloatingField("password2"),
             ),
@@ -68,6 +69,11 @@ class CreateUserForm(UserCreationForm):
                 css_class="d-grid gap-2 d-md-flex justify-content-md-end",
             ),
         )
+
+    def create_customer(self, user):
+        phone_number = self.cleaned_data.get("phone_number")
+        customer = Customer.objects.create(user=user, phone_number=phone_number)
+        return customer
 
 
 """User login form that includes fields for username and password."""

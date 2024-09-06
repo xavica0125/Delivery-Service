@@ -40,7 +40,8 @@ class Customer(UserProfile):
         max_length=15,
     )
     state = models.CharField(max_length=15, default="TX")
-    zip_code = models.PositiveIntegerField()
+    zip_code = models.PositiveIntegerField(null=True)
+
 
 """Driver model that holds relevant information. Relationship with User model is defined as OneToOneField using user_id as the primary key/foreign key."""
 
@@ -93,6 +94,7 @@ class Order(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
     order_status = models.CharField(max_length=15, choices=Status)
     reason_for_refusal = models.TextField(max_length=200, blank=True)
+
 
 """Model that stores reference numbers used by customers and are associated via foreign key with the Order model's primary key."""
 
