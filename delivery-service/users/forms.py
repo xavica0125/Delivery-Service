@@ -15,7 +15,7 @@ from crispy_forms.layout import (
     Div,
     HTML,
     ButtonHolder,
-    MultiField,
+    Field,
 )
 from crispy_bootstrap5.bootstrap5 import FloatingField
 from delivery_service.settings import EMAIL_HOST_USER
@@ -30,6 +30,7 @@ class CreateUserForm(UserCreationForm):
     email = forms.EmailField(widget=forms.EmailInput())
     first_name = forms.CharField(max_length=50, widget=forms.TextInput())
     last_name = forms.CharField(max_length=50, widget=forms.TextInput())
+    phone_number = forms.CharField(max_length=14, widget=forms.TextInput())
 
     class Meta:
         model = User
@@ -58,6 +59,7 @@ class CreateUserForm(UserCreationForm):
                 FloatingField("last_name"),
                 FloatingField("username"),
                 FloatingField("email"),
+                FloatingField("phone_number"),
                 FloatingField("password1"),
                 FloatingField("password2"),
             ),
