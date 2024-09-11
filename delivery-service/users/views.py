@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
-from .forms import CreateUserForm, LoginForm
+from .forms import CreateUserForm, CustomerSignUpForm, LoginForm
 from .models import *
 from django.contrib.auth.decorators import login_required
 from django_htmx.http import retarget, HttpResponseClientRedirect
@@ -24,8 +24,10 @@ def register(request):
                 if request.htmx:
                     # response = JsonResponse({"redirect": "user_preferences"})
                     # response["HX-Redirect"] = redirect("user_preferences").url
-                    response = HttpResponseClientRedirect("user_preferences")
-                    return response
+                    print("it worked")
+                    # response = HttpResponseClientRedirect("customer_sign_up")
+                    # return response
+                    return redirect("customer_sign_up")
         else:
             if request.htmx:
                 response = render(request, "register.html", {"form": form})
@@ -33,6 +35,26 @@ def register(request):
     else:
         form = CreateUserForm()
     return render(request, "register.html", {"form": form})
+
+
+"""View after registration to input customer address and payment information."""
+
+
+def customer_sign_up(request):
+    if request.method == "POST":
+        form = CustomerSignUpForm(request.POST)
+        if form.is_valid():
+            form.save()
+            if request.htmx:
+                response = HttpResponseClientRedirect("user_preferences")
+                return response
+        else:
+            if request.htmx:
+                response = render(request, "customer_sign_up.html", {"form": form})
+                return retarget(response, "#modals-here .modal-body")
+    else:
+        form = CustomerSignUpForm()
+    return render(request, "customer_sign_up.html", {"form": form})
 
 
 # User login view that authenticates the user and logs them in

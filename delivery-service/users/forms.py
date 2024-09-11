@@ -48,10 +48,11 @@ class CreateUserForm(UserCreationForm):
         super(CreateUserForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper(self)
         self.fields["username"].widget.attrs["autofocus"] = False
-        self.helper.form_action = reverse_lazy("register")
+        # self.helper.form_action = reverse_lazy("register")
         self.helper.attrs = {
             "hx-post": reverse_lazy("register"),
             "hx-target": "#modals-here .modal-body",
+            # "hx-swap": "innerHTML",
         }
         self.helper.layout = Layout(
             Fieldset(
@@ -60,12 +61,25 @@ class CreateUserForm(UserCreationForm):
                 FloatingField("last_name"),
                 FloatingField("username"),
                 FloatingField("email"),
-                FloatingField("phone_number"), #TODO phone number formatting is now always applied
+                FloatingField(
+                    "phone_number"
+                ),  # TODO phone number formatting is not always applied
                 FloatingField("password1"),
                 FloatingField("password2"),
             ),
             Div(
-                Submit("save", "Sign Up", css_class="btn btn-primary ml-auto"),
+                Submit(
+                    "save",
+                    "Sign Me Up",
+                    css_class="btn btn-secondary"
+                    """**{
+                        "hx-get": reverse_lazy(
+                            "customer_sign_up"
+                        ),  # URL to fetch the signup form
+                        "hx-target": "#modals-here .modal-body",
+                        "hx-trigger": "click",
+                    }""",
+                ),
                 css_class="d-grid gap-2 d-md-flex justify-content-md-end",
             ),
         )
@@ -74,6 +88,46 @@ class CreateUserForm(UserCreationForm):
         phone_number = self.cleaned_data.get("phone_number")
         customer = Customer.objects.create(user=user, phone_number=phone_number)
         return customer
+
+
+"""Customer sign up form to fill out additional preferences."""
+
+
+class CustomerSignUpForm(forms.Form):
+    street_address = forms.CharField(max_length=50)
+    city = forms.CharField(max_length=50)
+    state = forms.CharField(max_length=5)
+    zip_code = forms.CharField(max_length=10)
+    notification_preference = forms.ChoiceField(choices=Customer.ContactChoice)
+
+    class Meta:
+        model = Customer
+        fields = (
+            "street_address",
+            "city",
+            "state",
+            "zip_code",
+            "notification_preference",
+        )
+
+    def __init__(self, *args, **kwargs):
+        super(CustomerSignUpForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper(self)
+        self.helper.form_action = reverse_lazy("customer_sign_up")
+        self.helper.attrs = {
+            "hx-post": reverse_lazy("customer_sign_up"),
+            "hx-target": "#modals-here .modal-body",
+        }
+        self.helper.layout = Layout(
+            Fieldset(
+                "",
+                FloatingField("street_address"),
+                FloatingField("city"),
+                FloatingField("state", css_class="disabled"),
+                FloatingField("zip_code"),
+                FloatingField("notification_preference"),
+            )
+        )
 
 
 """User login form that includes fields for username and password."""
