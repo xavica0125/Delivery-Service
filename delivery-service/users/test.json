@@ -1,0 +1,145 @@
+{
+    "result": {
+        "verdict": {
+            "inputGranularity": "PREMISE",
+            "validationGranularity": "PREMISE",
+            "geocodeGranularity": "PREMISE",
+            "addressComplete": true,
+            "hasInferredComponents": true
+        },
+        "address": {
+            "formattedAddress": "7907 Canoga Avenue, Austin, TX 78724-5726, USA",
+            "postalAddress": {
+                "regionCode": "US",
+                "languageCode": "en",
+                "postalCode": "78724-5726",
+                "administrativeArea": "TX",
+                "locality": "Austin",
+                "addressLines": [
+                    "7907 Canoga Ave"
+                ]
+            },
+            "addressComponents": [
+                {
+                    "componentName": {
+                        "text": "7907"
+                    },
+                    "componentType": "street_number",
+                    "confirmationLevel": "CONFIRMED"
+                },
+                {
+                    "componentName": {
+                        "text": "Canoga Avenue",
+                        "languageCode": "en"
+                    },
+                    "componentType": "route",
+                    "confirmationLevel": "CONFIRMED"
+                },
+                {
+                    "componentName": {
+                        "text": "Austin",
+                        "languageCode": "en"
+                    },
+                    "componentType": "locality",
+                    "confirmationLevel": "CONFIRMED"
+                },
+                {
+                    "componentName": {
+                        "text": "USA",
+                        "languageCode": "en"
+                    },
+                    "componentType": "country",
+                    "confirmationLevel": "CONFIRMED"
+                },
+                {
+                    "componentName": {
+                        "text": "TX",
+                        "languageCode": "en"
+                    },
+                    "componentType": "administrative_area_level_1",
+                    "confirmationLevel": "CONFIRMED",
+                    "inferred": true
+                },
+                {
+                    "componentName": {
+                        "text": "78724"
+                    },
+                    "componentType": "postal_code",
+                    "confirmationLevel": "CONFIRMED",
+                    "inferred": true
+                },
+                {
+                    "componentName": {
+                        "text": "5726"
+                    },
+                    "componentType": "postal_code_suffix",
+                    "confirmationLevel": "CONFIRMED",
+                    "inferred": true
+                }
+            ]
+        },
+        "geocode": {
+            "location": {
+                "latitude": 30.2861651,
+                "longitude": -97.6389399
+            },
+            "plusCode": {
+                "globalCode": "862479P6+FC"
+            },
+            "bounds": {
+                "low": {
+                    "latitude": 30.2860595,
+                    "longitude": -97.6389844
+                },
+                "high": {
+                    "latitude": 30.2862707,
+                    "longitude": -97.6388955
+                }
+            },
+            "featureSizeMeters": 12.49546,
+            "placeId": "ChIJdSmRyca3RIYRCywzD97Rn4M",
+            "placeTypes": [
+                "premise"
+            ]
+        },
+        "metadata": {
+            "business": false,
+            "poBox": false,
+            "residential": true
+        },
+        "uspsData": {
+            "standardizedAddress": {
+                "firstAddressLine": "7907 CANOGA AVE",
+                "cityStateZipAddressLine": "AUSTIN TX 78724-5726",
+                "city": "AUSTIN",
+                "state": "TX",
+                "zipCode": "78724",
+                "zipCodeExtension": "5726"
+            },
+            "deliveryPointCode": "07",
+            "deliveryPointCheckDigit": "5",
+            "dpvConfirmation": "Y",
+            "dpvFootnote": "AABB",
+            "dpvCmra": "N",
+            "dpvVacant": "N",
+            "dpvNoStat": "N",
+            "carrierRoute": "C050",
+            "carrierRouteIndicator": "D",
+            "postOfficeCity": "AUSTIN",
+            "postOfficeState": "TX",
+            "fipsCountyCode": "453",
+            "county": "TRAVIS",
+            "elotNumber": "0420",
+            "elotFlag": "A",
+            "addressRecordType": "S",
+            "dpvDrop": "N",
+            "dpvThrowback": "N",
+            "dpvNonDeliveryDays": "N",
+            "dpvNoSecureLocation": "N",
+            "dpvPbsa": "N",
+            "dpvDoorNotAccessible": "N",
+            "dpvEnhancedDeliveryCode": "Y"
+        }
+    },
+    "responseId": "1e2e2440-c92d-40fc-aa13-89b8ba0c5ef3"
+}

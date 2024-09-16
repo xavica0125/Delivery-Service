@@ -6,6 +6,7 @@ from .models import *
 from django.contrib.auth.decorators import login_required
 from django_htmx.http import retarget, HttpResponseClientRedirect
 from django.http import JsonResponse
+from .utils import *
 
 
 # Registration view that validates the form and saves the user to the database
@@ -24,7 +25,6 @@ def register(request):
                 if request.htmx:
                     # response = JsonResponse({"redirect": "user_preferences"})
                     # response["HX-Redirect"] = redirect("user_preferences").url
-                    print("it worked")
                     # response = HttpResponseClientRedirect("customer_sign_up")
                     # return response
                     return redirect("customer_sign_up")
@@ -74,6 +74,8 @@ def login(request):
                 messages.error(request, "Username or password is incorrect.")
     else:
         form = LoginForm()
+        validate()
+        validatev2()
     return render(request, "login.html", {"form": form})
 
 
