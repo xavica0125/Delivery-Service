@@ -74,8 +74,6 @@ def login(request):
                 messages.error(request, "Username or password is incorrect.")
     else:
         form = LoginForm()
-        validate()
-        validatev2()
     return render(request, "login.html", {"form": form})
 
 

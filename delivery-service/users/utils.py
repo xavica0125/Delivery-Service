@@ -3,10 +3,9 @@ from google.maps import addressvalidation_v1
 import googlemaps
 from google.type import postal_address_pb2
 from google.oauth2 import service_account
-import os
 
 
-def validate():
+"""def validate():
 
     gmaps = googlemaps.Client(key=settings.MAPS_KEY)
 
@@ -15,15 +14,15 @@ def validate():
         regionCode="US",
         locality="Austin",
     )
-    print(address_validation_result)
+    print(address_validation_result)"""
 
 
-def validatev2():
-    credentials = service_account.Credentials.from_service_account_file(
-        "/workspaces/Delivery-Service/delivery-service/users/service_account.json"
-    )
+def validate_customer_address():
+    # credentials = service_account.Credentials.from_service_account_file(
+    #    settings.GOOGLE_SERVICE_ACCOUNT_KEY
+    # )
 
-    client = addressvalidation_v1.AddressValidationClient(credentials=credentials)
+    client = addressvalidation_v1.AddressValidationClient()
 
     address1 = postal_address_pb2.PostalAddress(
         address_lines=["109 Coneflower"],  # Street address
