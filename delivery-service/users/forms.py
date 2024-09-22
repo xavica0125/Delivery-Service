@@ -94,11 +94,11 @@ class CreateUserForm(UserCreationForm):
 
 
 class CustomerSignUpForm(forms.Form):
-    street_address = forms.CharField(max_length=15, label="Street Address")
+    street_address = forms.CharField(max_length=50, label="Street Address")
     sub_premise = forms.CharField(
-        max_length=15, label="Street Address 2 (eg. Building, Apt #)"
+        max_length=50, label="Street Address 2 (eg. Building, Apt #)"
     )
-    city = forms.CharField(max_length=15)
+    city = forms.CharField(max_length=50)
     state = forms.CharField(
         max_length=5,
         widget=forms.TextInput(attrs={"disabled": True}),

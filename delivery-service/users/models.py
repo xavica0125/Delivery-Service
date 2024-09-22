@@ -34,11 +34,11 @@ class Customer(UserProfile):
     notification_preference = models.CharField(max_length=15, choices=ContactChoice)
     date_created = models.DateTimeField(auto_now_add=True)
     street_address = models.CharField(
-        max_length=15,
+        max_length=50,
     )
-    sub_premise = models.CharField(max_length=15)
+    sub_premise = models.CharField(max_length=50)
     city = models.CharField(
-        max_length=15,
+        max_length=50,
     )
     state = models.CharField(max_length=15, default="TX", editable=False, blank=True)
     zip_code = models.PositiveIntegerField(null=True)
