@@ -94,16 +94,24 @@ class CreateUserForm(UserCreationForm):
 
 
 class CustomerSignUpForm(forms.Form):
-    street_address = forms.CharField(max_length=50)
-    city = forms.CharField(max_length=50)
-    state = forms.CharField(max_length=5)
-    zip_code = forms.CharField(max_length=10)
+    street_address = forms.CharField(max_length=15, label="Street Address")
+    sub_premise = forms.CharField(
+        max_length=15, label="Street Address 2 (eg. Building, Apt #)"
+    )
+    city = forms.CharField(max_length=15)
+    state = forms.CharField(
+        max_length=5,
+        widget=forms.TextInput(attrs={"disabled": True}),
+        initial="TX",
+    )
+    zip_code = forms.CharField(max_length=10, label="Zip Code")
     notification_preference = forms.ChoiceField(choices=Customer.ContactChoice)
 
     class Meta:
         model = Customer
         fields = (
             "street_address",
+            "sub_premise",
             "city",
             "state",
             "zip_code",
@@ -122,8 +130,9 @@ class CustomerSignUpForm(forms.Form):
             Fieldset(
                 "",
                 FloatingField("street_address"),
+                FloatingField("sub_premise"),
                 FloatingField("city"),
-                FloatingField("state", css_class="disabled"),
+                FloatingField("state"),
                 FloatingField("zip_code"),
                 FloatingField("notification_preference"),
             )
