@@ -82,3 +82,7 @@ def logout(request):
     auth_logout(request)
     messages.success(request, "Logout successful!")
     return redirect("login")
+
+@login_required(login_url="/")
+def customer_home(request):
+    return render(request, "customer_home.html")
