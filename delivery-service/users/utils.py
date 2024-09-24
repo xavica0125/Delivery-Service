@@ -17,17 +17,18 @@ from google.oauth2 import service_account
     print(address_validation_result)"""
 
 
-def validate_customer_address():
+def validate_customer_address(cust_address, city, zip_code):
     # credentials = service_account.Credentials.from_service_account_file(
     #    settings.GOOGLE_SERVICE_ACCOUNT_KEY
     # )
 
     client = addressvalidation_v1.AddressValidationClient()
 
-    address1 = postal_address_pb2.PostalAddress(
-        address_lines=["109 Coneflower"],  # Street address
-        locality="Elgin",  # City
-        administrative_area="TX",  # State# ZIP code # Country
+    address = postal_address_pb2.PostalAddress(
+        address_lines=[cust_address],  # Street address
+        locality=city,  # City
+        administrative_area="TX",
+        postal_code=zip_code,  # State# ZIP code # Country
     )
 
     mapping_data = {
@@ -39,10 +40,30 @@ def validate_customer_address():
     }
 
     # Initialize request argument(s)
-    request = addressvalidation_v1.ValidateAddressRequest(address=address1)
+    request = addressvalidation_v1.ValidateAddressRequest(address=address)
 
     # Make the request
     response = client.validate_address(request=request)
 
-    # Handle the response
-    print(response)
+    return suggest_validation_action(response)
+
+
+
+"""Suggest validation action to take based on validate address response."""
+
+
+def suggest_validation_action(address_validation_response):
+    if (
+        address_validation_response["verdict"]["validationGranularity"]
+        not in ["PREMISE", "SUB_PREMISE"]
+    ):
+        return "FIX"
+    elif (
+        address_validation_response["verdict"]["hasInferredComponents"]
+        or address_validation_response["verdict"]["hasReplacedComponents"] or address_validation_response["verdict"]["hasUnconfirmedComponents"]
+    ):
+        return "CONFIRM"
+    elif(address_validation_response['verdict']["addressComplete"]):
+        return "ACCEPT"
+
+

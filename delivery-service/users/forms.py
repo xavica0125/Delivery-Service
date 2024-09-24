@@ -23,7 +23,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.contrib.auth.tokens import default_token_generator
 from .task import send_password_reset_email
 from .models import Customer
-
+from .utils import validate_customer_address
 """User registration form that extends the UserCreationForm from Django's auth module. The form includes fields for first name, last name, email, username, and password."""
 
 
@@ -137,7 +137,22 @@ class CustomerSignUpForm(forms.Form):
                 FloatingField("notification_preference"),
             )
         )
+    def clean(self):
+        cleaned_data = super().clean()
+        street_address = cleaned_data.get('street address')
+        sub_premise = cleaned_data.get('sub_premise)')
+        city = cleaned_data.get('city')
+        zip_code = cleaned_data.get("zip_code")
+        
+        address = f"{street_address}, {sub_premise}"
 
+        response = validate_customer_address(address, city, zip_code)
+
+        if response != "ACCEPT":
+            # Logic based on whether FIX or CONFIRM is returned
+            raise forms.ValidationError("The provided address is invalid. Please check and try again.")
+
+        return cleaned_data
 
 """User login form that includes fields for username and password."""
 
