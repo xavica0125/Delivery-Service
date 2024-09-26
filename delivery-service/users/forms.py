@@ -24,6 +24,7 @@ from django.contrib.auth.tokens import default_token_generator
 from .task import send_password_reset_email
 from .models import Customer
 from .utils import validate_customer_address
+
 """User registration form that extends the UserCreationForm from Django's auth module. The form includes fields for first name, last name, email, username, and password."""
 
 
@@ -87,22 +88,22 @@ class CreateUserForm(UserCreationForm):
     def create_customer(self, user):
         phone_number = self.cleaned_data.get("phone_number")
         customer = Customer.objects.create(user=user, phone_number=phone_number)
-        return customer
 
 
 """Customer sign up form to fill out additional preferences."""
 
 
-class CustomerSignUpForm(forms.Form):
+class CustomerSignUpForm(forms.ModelForm):
     street_address = forms.CharField(max_length=50, label="Street Address")
     sub_premise = forms.CharField(
-        max_length=50, label="Street Address 2 (eg. Building, Apt #)"
+        max_length=50, label="Street Address 2 (eg. Building, Apt #)", required=False
     )
     city = forms.CharField(max_length=50)
     state = forms.CharField(
         max_length=5,
         widget=forms.TextInput(attrs={"disabled": True}),
         initial="TX",
+        required=False,
     )
     zip_code = forms.CharField(max_length=10, label="Zip Code")
     notification_preference = forms.ChoiceField(choices=Customer.ContactChoice)
@@ -135,24 +136,28 @@ class CustomerSignUpForm(forms.Form):
                 FloatingField("state"),
                 FloatingField("zip_code"),
                 FloatingField("notification_preference"),
-            )
+            ),
+            Div(Submit("submit", "Login", css_class="btn btn-primary")),
         )
+
     def clean(self):
         cleaned_data = super().clean()
-        street_address = cleaned_data.get('street address')
-        sub_premise = cleaned_data.get('sub_premise)')
-        city = cleaned_data.get('city')
+        street_address = cleaned_data.get("street_address")
+        sub_premise = cleaned_data.get("sub_premise)")
+        city = cleaned_data.get("city")
         zip_code = cleaned_data.get("zip_code")
-        
-        address = f"{street_address}, {sub_premise}"
+
+        address = f"{street_address} {sub_premise}" if sub_premise else street_address
 
         response = validate_customer_address(address, city, zip_code)
-
+        print(response)
         if response != "ACCEPT":
-            # Logic based on whether FIX or CONFIRM is returned
-            raise forms.ValidationError("The provided address is invalid. Please check and try again.")
+            raise forms.ValidationError(
+                "The provided address is invalid. Please check and try again."
+            )
 
         return cleaned_data
+
 
 """User login form that includes fields for username and password."""
 
@@ -201,7 +206,7 @@ class LoginForm(forms.Form):
                             "hx-trigger": "click",
                             "data-bs-toggle": "modal",
                             "data-bs-target": "#modals-here",
-                        }
+                        },
                     ),
                     # css_class="d-grid gap-2 d-md-flex justify-content-md-end",
                     css_class="d-flex gap-2",

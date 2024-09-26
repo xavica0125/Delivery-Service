@@ -4,7 +4,7 @@ from django.contrib.auth import authenticate, login as auth_login, logout as aut
 from .forms import CreateUserForm, CustomerSignUpForm, LoginForm
 from .models import *
 from django.contrib.auth.decorators import login_required
-from django_htmx.http import retarget, HttpResponseClientRedirect
+from django_htmx.http import retarget, HttpResponseClientRedirect, reswap
 from django.http import JsonResponse
 from .utils import *
 
@@ -41,13 +41,14 @@ def register(request):
 
 
 def customer_sign_up(request):
+    user = Customer.objects.get(user=request.user)
     if request.method == "POST":
-        form = CustomerSignUpForm(request.POST)
+        form = CustomerSignUpForm(request.POST, instance=user)
         if form.is_valid():
             form.save()
             if request.htmx:
-                response = HttpResponseClientRedirect("user_preferences")
-                return response
+                response = HttpResponseClientRedirect("home/")
+                return retarget(response, "outerHTML")
         else:
             if request.htmx:
                 response = render(request, "customer_sign_up.html", {"form": form})
@@ -82,6 +83,7 @@ def logout(request):
     auth_logout(request)
     messages.success(request, "Logout successful!")
     return redirect("login")
+
 
 @login_required(login_url="/")
 def customer_home(request):

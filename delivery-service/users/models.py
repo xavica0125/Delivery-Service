@@ -36,11 +36,11 @@ class Customer(UserProfile):
     street_address = models.CharField(
         max_length=50,
     )
-    sub_premise = models.CharField(max_length=50)
+    sub_premise = models.CharField(max_length=50, blank=True)
     city = models.CharField(
         max_length=50,
     )
-    state = models.CharField(max_length=15, default="TX", editable=False, blank=True)
+    state = models.CharField(max_length=15, default="TX", blank=True)
     zip_code = models.PositiveIntegerField(null=True)
 
 

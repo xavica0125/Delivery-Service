@@ -41,29 +41,25 @@ def validate_customer_address(cust_address, city, zip_code):
 
     # Initialize request argument(s)
     request = addressvalidation_v1.ValidateAddressRequest(address=address)
-
     # Make the request
     response = client.validate_address(request=request)
-
+    print(response)
     return suggest_validation_action(response)
-
 
 
 """Suggest validation action to take based on validate address response."""
 
 
 def suggest_validation_action(address_validation_response):
-    if (
-        address_validation_response["verdict"]["validationGranularity"]
-        not in ["PREMISE", "SUB_PREMISE"]
-    ):
+    if address_validation_response.result.verdict.validation_granularity not in [1, 2]:
+        print(address_validation_response.result.verdict.validation_granularity)
         return "FIX"
     elif (
-        address_validation_response["verdict"]["hasInferredComponents"]
-        or address_validation_response["verdict"]["hasReplacedComponents"] or address_validation_response["verdict"]["hasUnconfirmedComponents"]
+        # address_validation_response["result"]["verdict"]["hasInferredComponents"]
+        address_validation_response.result.verdict.has_replaced_components
     ):
+        # or address_validation_response.result.verdict.has_unconfirmed_components
+
         return "CONFIRM"
-    elif(address_validation_response['verdict']["addressComplete"]):
+    elif address_validation_response.result.verdict.address_complete:
         return "ACCEPT"
-
-
