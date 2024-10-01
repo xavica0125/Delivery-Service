@@ -107,7 +107,7 @@ class CustomerSignUpForm(forms.ModelForm):
     )
     zip_code = forms.CharField(max_length=10, label="Zip Code")
     notification_preference = forms.ChoiceField(choices=Customer.ContactChoice)
-
+    validation_action, validation_response = None
     class Meta:
         model = Customer
         fields = (
@@ -149,16 +149,22 @@ class CustomerSignUpForm(forms.ModelForm):
 
         address = f"{street_address} {sub_premise}" if sub_premise else street_address
 
-        response = validate_customer_address(address, city, zip_code)
-        print(response)
-        if response != "ACCEPT":
+        self.validation_action, self.validation_response = validate_customer_address(address, city, zip_code)
+        
+        if self.validation_action == "FIX":
             raise forms.ValidationError(
                 "The provided address is invalid. Please check and try again."
+            )
+        elif self.validation_action == "CONFIRM":
+            raise forms.ValidationError(
+                "Confirm your address."
             )
 
         return cleaned_data
 
-
+    def get_formatted_address(self):
+        return self.validation_response.result.address.formatted_address
+    
 """User login form that includes fields for username and password."""
 
 
