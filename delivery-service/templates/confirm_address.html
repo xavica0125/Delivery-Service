@@ -1,0 +1,16 @@
+
+
+<h3>Please confirm your address:</h3>
+<p>Inferred address: {{ formatted_address }}</p>
+
+<form method="post">
+    {% csrf_token %}
+    <input type="hidden" name="confirmed_address"
+        value="{{ formatted_address }}">
+    <button type="submit">Confirm and Submit</button>
+</form>
+
+<a href="{% url 'customer_sign_up' %}"
+    hx-get="{% url 'customer_sign_up' %}"
+    hx-target="#modals-here .modal-body"
+    hx-swap="innerHTML">Reenter Address</a>

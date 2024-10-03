@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django_htmx.http import retarget, HttpResponseClientRedirect, reswap
 from django.http import JsonResponse
 from .utils import *
+from django.views.decorators.csrf import ensure_csrf_cookie
 
 
 # Registration view that validates the form and saves the user to the database
@@ -50,9 +51,19 @@ def customer_sign_up(request):
                 response = HttpResponseClientRedirect("home/")
                 return retarget(response, "outerHTML")
         else:
+            print(form.errors)
             if request.htmx:
-                response = render(request, "customer_sign_up.html", {"form": form})
-                return retarget(response, "#modals-here .modal-body")
+                if "Confirm your address." in form.non_field_errors():
+                    formatted_address = form.get_formatted_address()
+                    response = render(
+                        request,
+                        "confirm_address.html",
+                        {"formatted_address": formatted_address},
+                    )
+                    return retarget(response, "#modals-here .modal-body")
+                else:
+                    response = render(request, "customer_sign_up.html", {"form": form})
+                    return retarget(response, "#modals-here .modal-body")
     else:
         form = CustomerSignUpForm()
     return render(request, "customer_sign_up.html", {"form": form})
