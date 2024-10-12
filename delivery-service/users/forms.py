@@ -100,7 +100,7 @@ class CustomerSignUpForm(forms.ModelForm):
     city = forms.CharField(max_length=50)
     state = forms.CharField(
         max_length=5,
-        widget=forms.TextInput(attrs={"disabled": True}),
+        widget=forms.TextInput(attrs={"readonly": "readonly", "class": "grayed-out"}),
         initial="TX",
         required=False,
     )
