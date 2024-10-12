@@ -5,16 +5,7 @@ from google.type import postal_address_pb2
 from google.oauth2 import service_account
 
 
-"""def validate():
-
-    gmaps = googlemaps.Client(key=settings.MAPS_KEY)
-
-    address_validation_result = gmaps.addressvalidation(
-        ["7907 Canoga Av"],
-        regionCode="US",
-        locality="Austin",
-    )
-    print(address_validation_result)"""
+"""Creates validation request and returns validation action and response from validation request. """
 
 
 def validate_customer_address(cust_address, city, zip_code):
@@ -24,12 +15,15 @@ def validate_customer_address(cust_address, city, zip_code):
 
     client = addressvalidation_v1.AddressValidationClient()
 
-    address = postal_address_pb2.PostalAddress(
-        address_lines=[cust_address],  # Street address
-        locality=city,  # City
-        administrative_area="TX",
-        postal_code=zip_code,  # State# ZIP code # Country
-    )
+    if not city or not zip_code:
+        address = postal_address_pb2.PostalAddress(address_lines=[cust_address])
+    else:
+        address = postal_address_pb2.PostalAddress(
+            address_lines=[cust_address],  # Street address
+            locality=city,  # City
+            administrative_area="TX",
+            postal_code=zip_code,  # State# ZIP code # Country
+        )
 
     mapping_data = {
         "address": {
@@ -64,3 +58,23 @@ def suggest_validation_action(address_validation_response):
         return "CONFIRM"
     else:
         return "ACCEPT"
+
+
+""" Utility function that populates context that will be sent to confirmation template."""
+
+
+def populate_address_context(address_components, context={}):
+    for component in address_components:
+        component_type = component.component_type
+        if component_type == "street_number":
+            context["street_address"] = component.component_name.text
+        elif component_type == "route":
+            context["street_address"] += f" {component.component_name.text}"
+        elif component_type == "subpremise":
+            context["sub_premise"] = component.component_name.text
+        elif component_type == "locality":
+            context["city"] = component.component_name.text
+        elif component_type == "postal_code":
+            context["zip_code"] = component.component_name.text
+
+    return context

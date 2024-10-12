@@ -3,10 +3,16 @@
 <h3>Please confirm your address:</h3>
 <p>Inferred address: {{ formatted_address }}</p>
 
-<form method="post">
+<form method="post" action="{% url 'address_confirmation' %}">
     {% csrf_token %}
-    <input type="hidden" name="confirmed_address"
-        value="{{ formatted_address }}">
+    <input type="hidden" name="street_address"
+        value="{{ street_address }}">
+    <input type="hidden" name="sub_premise"
+        value="{{ sub_premise }}">
+    <input type="hidden" name="city"
+        value="{{ city }}">
+    <input type="hidden" name="zip_code"
+        value="{{ zip_code }}">
     <button type="submit">Confirm and Submit</button>
 </form>
 

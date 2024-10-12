@@ -53,7 +53,6 @@ class CreateUserForm(UserCreationForm):
         self.helper.attrs = {
             "hx-post": reverse_lazy("register"),
             "hx-target": "#modals-here .modal-body",
-            # "hx-swap": "innerHTML",
         }
         self.helper.layout = Layout(
             Fieldset(
@@ -144,7 +143,7 @@ class CustomerSignUpForm(forms.ModelForm):
     def clean(self):
         cleaned_data = super().clean()
         street_address = cleaned_data.get("street_address")
-        sub_premise = cleaned_data.get("sub_premise)")
+        sub_premise = cleaned_data.get("sub_premise")
         city = cleaned_data.get("city")
         zip_code = cleaned_data.get("zip_code")
 
@@ -165,6 +164,9 @@ class CustomerSignUpForm(forms.ModelForm):
 
     def get_formatted_address(self):
         return self.validation_response.result.address.formatted_address
+
+    def get_address_components(self):
+        return self.validation_response.result.address.address_components
 
 
 """User login form that includes fields for username and password."""
@@ -293,40 +295,3 @@ class Password_Reset_Confirm(SetPasswordForm):
                 css_class="d-grid gap-2 d-md-flex justify-content-md-end",
             ),
         )
-
-
-"""User preferences form that allows the user to select their preferences based off of the categories in Preferences model."""
-
-
-"""class UserPreferences(forms.ModelForm):
-    class Meta:
-        model = Preferences
-        fields = [
-            "business",
-            "entertainment",
-            "general",
-            "health",
-            "science",
-            "sports",
-            "technology",
-        ]
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-        # Dynamically create boolean fields with custom widget attributes
-        for field_name in self.Meta.fields:
-            self.fields[field_name] = forms.BooleanField(required=False)
-
-        self.helper = FormHelper(self)
-        self.helper.layout = Layout(
-            Fieldset(
-                "",
-                *self.Meta.fields,  # Include all fields in the layout
-                css_class="form-check form-switch"
-            ),
-            ButtonHolder(
-                Submit("submit", "Submit", css_class="btn btn-primary"),
-                css_class="d-grid gap-2 d-md-flex justify-content-md-end",
-            ),
-        )"""

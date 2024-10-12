@@ -7,10 +7,11 @@ from django.contrib.auth.decorators import login_required
 from django_htmx.http import retarget, HttpResponseClientRedirect, reswap
 from django.http import JsonResponse
 from .utils import *
-from django.views.decorators.csrf import ensure_csrf_cookie
 
 
-# Registration view that validates the form and saves the user to the database
+"""Registration view that validates the form and saves the user to the database"""
+
+
 def register(request):
     if request.method == "POST":
         form = CreateUserForm(request.POST)
@@ -24,10 +25,7 @@ def register(request):
                 auth_login(request, user)
                 messages.success(request, "Registration successful!")
                 if request.htmx:
-                    # response = JsonResponse({"redirect": "user_preferences"})
-                    # response["HX-Redirect"] = redirect("user_preferences").url
-                    # response = HttpResponseClientRedirect("customer_sign_up")
-                    # return response
+
                     return redirect("customer_sign_up")
         else:
             if request.htmx:
@@ -55,18 +53,33 @@ def customer_sign_up(request):
             if request.htmx:
                 if "Confirm your address." in form.non_field_errors():
                     formatted_address = form.get_formatted_address()
-                    response = render(
-                        request,
-                        "confirm_address.html",
-                        {"formatted_address": formatted_address},
-                    )
-                    return retarget(response, "#modals-here .modal-body")
+                    address_components = form.get_address_components()
+                    context = populate_address_context(address_components)
+                    context["formatted_address"] = formatted_address
+
+                    response = render(request, "confirm_address.html", context)
+                    return reswap(response, "innerHTML")
                 else:
                     response = render(request, "customer_sign_up.html", {"form": form})
                     return retarget(response, "#modals-here .modal-body")
     else:
         form = CustomerSignUpForm()
     return render(request, "customer_sign_up.html", {"form": form})
+
+
+"""View that saves address components of inferred address to Customer model instance after user confirmation."""
+
+
+def address_confirmation(request):
+    user = Customer.objects.get(user=request.user)
+    user.street_address = request.POST.get("street_address")
+    user.sub_premise = request.POST.get("sub_premise")
+    user.city = request.POST.get("city")
+    user.zip_code = request.POST.get("zip_code")
+
+    user.save()
+
+    return redirect("customer_home")
 
 
 # User login view that authenticates the user and logs them in
@@ -82,7 +95,6 @@ def login(request):
                 messages.success(request, "Login successful!")
                 return redirect("user_preferences")
             else:
-
                 messages.error(request, "Username or password is incorrect.")
     else:
         form = LoginForm()
