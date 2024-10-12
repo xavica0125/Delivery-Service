@@ -56,7 +56,9 @@ def customer_sign_up(request):
                     address_components = form.get_address_components()
                     context = populate_address_context(address_components)
                     context["formatted_address"] = formatted_address
-
+                    contact_preference = request.POST.get("notification_preference")
+                    user.notification_preference = contact_preference
+                    user.save()
                     response = render(request, "confirm_address.html", context)
                     return reswap(response, "innerHTML")
                 else:
