@@ -68,17 +68,16 @@ class CreateUserForm(UserCreationForm):
                 FloatingField("password2"),
             ),
             Div(
+                Button(
+                    "close",
+                    "Close",
+                    css_class="btn btn-secondary",
+                    **{"data-bs-dismiss": "modal"},
+                ),
                 Submit(
                     "save",
                     "Sign Me Up",
-                    css_class="btn btn-secondary"
-                    """**{
-                        "hx-get": reverse_lazy(
-                            "customer_sign_up"
-                        ),  # URL to fetch the signup form
-                        "hx-target": "#modals-here .modal-body",
-                        "hx-trigger": "click",
-                    }""",
+                    css_class="btn btn-primary",
                 ),
                 css_class="d-grid gap-2 d-md-flex justify-content-md-end",
             ),
@@ -122,10 +121,11 @@ class CustomerSignUpForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(CustomerSignUpForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper(self)
-        self.helper.form_action = reverse_lazy("customer_sign_up")
+        # self.helper.form_action = reverse_lazy("customer_sign_up")
         self.helper.attrs = {
             "hx-post": reverse_lazy("customer_sign_up"),
-            "hx-target": "#modals-here .modal-body",
+            # "hx-target": "#modals-here .modal-body",
+            "hx-swap": "innerHTML",
         }
         self.helper.layout = Layout(
             Fieldset(
@@ -137,7 +137,10 @@ class CustomerSignUpForm(forms.ModelForm):
                 FloatingField("zip_code"),
                 FloatingField("notification_preference"),
             ),
-            Div(Submit("submit", "Login", css_class="btn btn-primary")),
+            Div(
+                Submit("submit", "Submit", css_class="btn btn-primary"),
+                css_class="d-grid gap-2 d-md-flex justify-content-md-end",
+            ),
         )
 
     def clean(self):
