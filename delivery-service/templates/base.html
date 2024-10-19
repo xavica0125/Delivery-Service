@@ -34,7 +34,7 @@
 }
   </style>
   </head>
-  <body>
+  <body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
     {% include 'navbar.html' %}
     <br />
     <div class="container">
