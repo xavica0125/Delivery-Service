@@ -25,7 +25,6 @@ def register(request):
                 auth_login(request, user)
                 messages.success(request, "Registration successful!")
                 if request.htmx:
-
                     return redirect("customer_sign_up")
         else:
             if request.htmx:
@@ -56,11 +55,14 @@ def customer_sign_up(request):
                     address_components = form.get_address_components()
                     context = populate_address_context(address_components)
                     context["formatted_address"] = formatted_address
+                    context["entered_address"] = form.get_entered_address()
                     contact_preference = request.POST.get("notification_preference")
                     user.notification_preference = contact_preference
                     user.save()
                     response = render(request, "confirm_address.html", context)
-                    return reswap(response, "innerHTML")
+                    return retarget(
+                        response, "#modals-here .modal-body"
+                    )
                 else:
                     response = render(request, "customer_sign_up.html", {"form": form})
                     return retarget(response, "#modals-here .modal-body")

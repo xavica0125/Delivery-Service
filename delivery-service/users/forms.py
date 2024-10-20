@@ -106,6 +106,7 @@ class CustomerSignUpForm(forms.ModelForm):
     zip_code = forms.CharField(max_length=10, label="Zip Code")
     notification_preference = forms.ChoiceField(choices=Customer.ContactChoice)
     validation_action, validation_response = None, None
+    formatted_entered_address = ""
 
     class Meta:
         model = Customer
@@ -150,6 +151,10 @@ class CustomerSignUpForm(forms.ModelForm):
         city = cleaned_data.get("city")
         zip_code = cleaned_data.get("zip_code")
 
+        self.formatted_entered_address = (
+            f"{street_address} {sub_premise}, {city}, TX, {zip_code}"
+        )
+
         address = f"{street_address} {sub_premise}" if sub_premise else street_address
 
         self.validation_action, self.validation_response = validate_customer_address(
@@ -167,6 +172,9 @@ class CustomerSignUpForm(forms.ModelForm):
 
     def get_formatted_address(self):
         return self.validation_response.result.address.formatted_address
+
+    def get_entered_address(self):
+        return self.formatted_entered_address
 
     def get_address_components(self):
         return self.validation_response.result.address.address_components
