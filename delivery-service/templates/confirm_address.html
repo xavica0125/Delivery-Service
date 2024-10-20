@@ -1,7 +1,9 @@
 
 
 <h3>Please confirm your address:</h3>
-<p>Inferred address: {{ formatted_address }}</p>
+
+<p>You entered: {{ entered_address }}</p>
+<p>Suggested address: {{ formatted_address }}</p>
 
 <form method="post" action="{% url 'address_confirmation' %}">
     {% csrf_token %}
@@ -13,10 +15,12 @@
         value="{{ city }}">
     <input type="hidden" name="zip_code"
         value="{{ zip_code }}">
-    <button type="submit">Confirm and Submit</button>
+    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+        <button class="btn btn-secondary" type="button"
+            hx-get="{% url 'customer_sign_up' %}"
+            hx-target="#modals-here .modal-body"
+            hx-swap="innerHTML">Re-enter Address</button>
+        <button class="btn btn-primary" type="submit">Confirm and
+            Submit</button>
+    </div>
 </form>
-
-<a href="{% url 'customer_sign_up' %}"
-    hx-get="{% url 'customer_sign_up' %}"
-    hx-target="#modals-here .modal-body"
-    hx-swap="innerHTML">Reenter Address</a>
