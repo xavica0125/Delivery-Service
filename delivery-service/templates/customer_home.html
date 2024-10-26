@@ -1,1 +1,28 @@
 {% extends 'base.html' %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col">
+            <h1> Welcome! </h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <h2> Your recent deliveries: </h2>
+            <ul> 1 </ul>
+            <ul> 2 </ul>
+            <ul> 3 </ul>
+        </div>
+        <div class="col-6 text-start fs-1">
+            <ul>
+                <a href="{% url 'create_delivery' %}" class="link-offset-2">
+                    Place Delivery </a>
+            </ul>
+            <ul> View Deliveries </ul>
+            <ul> Make A Payment </ul>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

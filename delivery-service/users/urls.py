@@ -12,6 +12,7 @@ urlpatterns = [
         "address_confirmation/", views.address_confirmation, name="address_confirmation"
     ),
     path("home/", views.customer_home, name="customer_home"),
+    path("create_delivery/", views.create_delivery, name="create_delivery"),
     path(
         "reset_password/",
         auth_views.PasswordResetView.as_view(

@@ -60,9 +60,7 @@ def customer_sign_up(request):
                     user.notification_preference = contact_preference
                     user.save()
                     response = render(request, "confirm_address.html", context)
-                    return retarget(
-                        response, "#modals-here .modal-body"
-                    )
+                    return retarget(response, "#modals-here .modal-body")
                 else:
                     response = render(request, "customer_sign_up.html", {"form": form})
                     return retarget(response, "#modals-here .modal-body")
@@ -115,3 +113,8 @@ def logout(request):
 @login_required(login_url="/")
 def customer_home(request):
     return render(request, "customer_home.html")
+
+
+@login_required(login_url="/")
+def create_delivery(request):
+    return render(request, "create_delivery.html", {})
