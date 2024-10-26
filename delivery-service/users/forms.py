@@ -124,7 +124,9 @@ class CustomerSignUpForm(forms.ModelForm):
         self.helper = FormHelper(self)
         # self.helper.form_action = reverse_lazy("customer_sign_up")
         self.helper.attrs = {
-            "hx-post": reverse_lazy("customer_sign_up"),
+            "hx-post": reverse_lazy(
+                "customer_sign_up"
+            ),  # TODO look into difference between using hx-swap and hx-target
             # "hx-target": "#modals-here .modal-body",
             "hx-swap": "innerHTML",
         }
