@@ -5,7 +5,7 @@
 <p>You entered: {{ entered_address }}</p>
 <p>Suggested address: {{ formatted_address }}</p>
 
-<form method="post" action="{% url 'address_confirmation' %}">
+<form method="post" action="{% url 'customer_sign_up' %}">
     {% csrf_token %}
     <input type="hidden" name="street_address"
         value="{{ street_address }}">

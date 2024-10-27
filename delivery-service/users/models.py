@@ -17,6 +17,24 @@ class UserProfile(models.Model):
     phone_number = PhoneNumberField()
 
 
+"""Model stores pickup/delivery location physical address."""
+
+
+class Address(models.Model):
+    street_address = models.CharField(
+        max_length=50,
+    )
+    sub_premise = models.CharField(max_length=50, blank=True)
+    city = models.CharField(
+        max_length=50,
+    )
+    state = models.CharField(max_length=2, default="TX", blank=True)
+    zip_code = models.PositiveIntegerField()
+
+    def __str__(self):
+        return f"{self.street_address} {self.sub_premise}, {self.city}, {self.state} {self.zip_code}"
+
+
 """Customer model that holds relevant information. Relationship with User model is defined as OneToOneField using user_id as the primary key/foreign key."""
 
 
@@ -33,15 +51,9 @@ class Customer(UserProfile):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     notification_preference = models.CharField(max_length=15, choices=ContactChoice)
     date_created = models.DateTimeField(auto_now_add=True)
-    street_address = models.CharField(
-        max_length=50,
+    default_pickup_address = models.OneToOneField(
+        Address, on_delete=models.CASCADE, null=True
     )
-    sub_premise = models.CharField(max_length=50, blank=True)
-    city = models.CharField(
-        max_length=50,
-    )
-    state = models.CharField(max_length=15, default="TX", blank=True)
-    zip_code = models.PositiveIntegerField(null=True)
 
 
 """Driver model that holds relevant information. Relationship with User model is defined as OneToOneField using user_id as the primary key/foreign key."""
@@ -89,12 +101,18 @@ class Order(models.Model):
     )
     content = models.TextField(max_length=500)
     total_amount = MoneyField(max_digits=6, decimal_places=2, default_currency="USD")
-    date_created = models.DateTimeField(auto_now_add=True)
-    date_picked_up = models.DateTimeField(null=True)
-    date_delivered = models.DateTimeField(null=True)
+    time_created = models.DateTimeField(auto_now_add=True)
+    time_picked_up = models.DateTimeField(null=True)
+    time_delivered = models.DateTimeField(null=True)
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
     order_status = models.CharField(max_length=15, choices=Status)
     reason_for_refusal = models.TextField(max_length=200, blank=True)
+    pickup_address = models.ForeignKey(
+        Address, on_delete=models.SET_NULL, null=True, related_name="pickup_orders"
+    )
+    delivery_address = models.ForeignKey(
+        Address, on_delete=models.SET_NULL, null=True, related_name="delivery_orders"
+    )
 
 
 """Model that stores reference numbers used by customers and are associated via foreign key with the Order model's primary key."""
@@ -109,7 +127,7 @@ class ReferenceNumber(models.Model):
 
 
 class DeliveryLocation(models.Model):
-    name = models.CharField(
+    location_name = models.CharField(
         max_length=15,
     )
     poc_name = models.CharField(
@@ -117,18 +135,3 @@ class DeliveryLocation(models.Model):
     )
     poc_phone_number = PhoneNumberField()
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
-
-
-"""Model stores delivery location physical address and references DeliveryLocation instance via foreign key."""
-
-
-class DeliveryLocationAddress(models.Model):
-    street_address = models.CharField(
-        max_length=15,
-    )
-    sub_premise = models.CharField(max_length=15)
-    city = models.CharField(
-        max_length=15,
-    )
-    state = models.CharField(max_length=2, default="TX", editable=False, blank=True)
-    zip_code = models.PositiveIntegerField()

@@ -22,7 +22,7 @@ from delivery_service.settings import EMAIL_HOST_USER
 from django.contrib.sites.shortcuts import get_current_site
 from django.contrib.auth.tokens import default_token_generator
 from .task import send_password_reset_email
-from .models import Customer
+from .models import Customer, Address
 from .utils import validate_customer_address
 
 """User registration form that extends the UserCreationForm from Django's auth module. The form includes fields for first name, last name, email, username, and password."""
@@ -33,6 +33,7 @@ class CreateUserForm(UserCreationForm):
     first_name = forms.CharField(max_length=50, widget=forms.TextInput())
     last_name = forms.CharField(max_length=50, widget=forms.TextInput())
     phone_number = forms.CharField(max_length=14, widget=forms.TextInput())
+    notification_preference = forms.ChoiceField(choices=Customer.ContactChoice)
 
     class Meta:
         model = User
@@ -64,6 +65,7 @@ class CreateUserForm(UserCreationForm):
                 FloatingField(
                     "phone_number"
                 ),  # TODO phone number formatting is not always applied
+                FloatingField("notification_preference"),
                 FloatingField("password1"),
                 FloatingField("password2"),
             ),
@@ -85,7 +87,12 @@ class CreateUserForm(UserCreationForm):
 
     def create_customer(self, user):
         phone_number = self.cleaned_data.get("phone_number")
-        customer = Customer.objects.create(user=user, phone_number=phone_number)
+        notification_preference = self.cleaned_data.get("notification_preference")
+        customer = Customer.objects.create(
+            user=user,
+            phone_number=phone_number,
+            notification_preference=notification_preference,
+        )
 
 
 """Customer sign up form to fill out additional preferences."""
@@ -98,25 +105,23 @@ class CustomerSignUpForm(forms.ModelForm):
     )
     city = forms.CharField(max_length=50)
     state = forms.CharField(
-        max_length=5,
+        max_length=2,
         widget=forms.TextInput(attrs={"readonly": "readonly", "class": "grayed-out"}),
         initial="TX",
         required=False,
     )
     zip_code = forms.CharField(max_length=10, label="Zip Code")
-    notification_preference = forms.ChoiceField(choices=Customer.ContactChoice)
     validation_action, validation_response = None, None
     formatted_entered_address = ""
 
     class Meta:
-        model = Customer
+        model = Address
         fields = (
             "street_address",
             "sub_premise",
             "city",
             "state",
             "zip_code",
-            "notification_preference",
         )
 
     def __init__(self, *args, **kwargs):
@@ -138,7 +143,6 @@ class CustomerSignUpForm(forms.ModelForm):
                 FloatingField("city"),
                 FloatingField("state"),
                 FloatingField("zip_code"),
-                FloatingField("notification_preference"),
             ),
             Div(
                 Submit("submit", "Submit", css_class="btn btn-primary"),
@@ -308,3 +312,15 @@ class Password_Reset_Confirm(SetPasswordForm):
                 css_class="d-grid gap-2 d-md-flex justify-content-md-end",
             ),
         )
+
+
+"""Order model form """
+
+
+class CreateOrder(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super.__init__(*args, **kwargs)
+        self.helper = FormHelper(self)
+        self.helper.form_action = reverse_lazy("create_delivery")
+        self.helper.layout = Layout()

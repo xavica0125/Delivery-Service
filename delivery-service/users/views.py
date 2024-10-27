@@ -35,18 +35,18 @@ def register(request):
     return render(request, "register.html", {"form": form})
 
 
-"""View after registration to input customer address and payment information."""
+"""View after registration to input customer address."""
 
 
 def customer_sign_up(request):
-    user = Customer.objects.get(user=request.user)
     if request.method == "POST":
-        form = CustomerSignUpForm(request.POST, instance=user)
+        form = CustomerSignUpForm(request.POST)
         if form.is_valid():
-            form.save()
-            if request.htmx:
-                response = HttpResponseClientRedirect("home/")
-                return retarget(response, "outerHTML")
+            validated_address = form.save()
+            user = Customer.objects.get(user=request.user)
+            user.default_pickup_address = validated_address
+            user.save()
+            return redirect("customer_home")
         else:
             print(form.errors)
             if request.htmx:
@@ -56,9 +56,6 @@ def customer_sign_up(request):
                     context = populate_address_context(address_components)
                     context["formatted_address"] = formatted_address
                     context["entered_address"] = form.get_entered_address()
-                    contact_preference = request.POST.get("notification_preference")
-                    user.notification_preference = contact_preference
-                    user.save()
                     response = render(request, "confirm_address.html", context)
                     return retarget(response, "#modals-here .modal-body")
                 else:
