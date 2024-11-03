@@ -37,7 +37,7 @@ def validate_customer_address(cust_address, city, zip_code):
     request = addressvalidation_v1.ValidateAddressRequest(address=address)
     # Make the request
     response = client.validate_address(request=request)
-    print(response)
+    # print(response)
     return (suggest_validation_action(response), response)
 
 
