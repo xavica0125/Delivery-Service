@@ -1,11 +1,12 @@
+{% extends 'base.html' %}
 
-
+{% block content %}
 <h3>Please confirm your address:</h3>
 
 <p>You entered: {{ entered_address }}</p>
 <p>Suggested address: {{ formatted_address }}</p>
 
-<form method="post" action="{% url 'customer_sign_up' %}">
+<form>
     {% csrf_token %}
     <input type="hidden" name="street_address"
         value="{{ street_address }}">
@@ -18,9 +19,11 @@
     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
         <button class="btn btn-secondary" type="button"
             hx-get="{% url 'customer_sign_up' %}"
-            hx-target="#modals-here .modal-body"
-            hx-swap="innerHTML">Re-enter Address</button>
-        <button class="btn btn-primary" type="submit">Confirm and
+            hx-target="#modals-here .modal-body">Re-enter Address</button>
+        <button class="btn btn-primary" type="submit"
+            hx-post="{% url 'customer_sign_up' %}">Confirm and
             Submit</button>
     </div>
 </form>
+
+{% endblock %}

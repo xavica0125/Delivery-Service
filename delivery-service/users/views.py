@@ -1,18 +1,21 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
-from .forms import CreateUserForm, CustomerSignUpForm, LoginForm
+from .forms import CreateUserForm, CustomerSignUpForm, LoginForm, CreateOrderForm
 from .models import *
 from django.contrib.auth.decorators import login_required
-from django_htmx.http import retarget, HttpResponseClientRedirect, reswap
+from django_htmx.http import retarget, HttpResponseClientRedirect
 from django.http import JsonResponse
 from .utils import *
+from django.middleware.csrf import get_token
 
 
 """Registration view that validates the form and saves the user to the database"""
 
 
 def register(request):
+    print(request.session.items())
+
     if request.method == "POST":
         form = CreateUserForm(request.POST)
         if form.is_valid():
@@ -23,9 +26,9 @@ def register(request):
             form.create_customer(user)
             if user is not None:
                 auth_login(request, user)
-                messages.success(request, "Registration successful!")
-                if request.htmx:
-                    return redirect("customer_sign_up")
+                request.session.save()
+                print(request.session.items())
+                return redirect("customer_sign_up")
         else:
             if request.htmx:
                 response = render(request, "register.html", {"form": form})
@@ -39,14 +42,23 @@ def register(request):
 
 
 def customer_sign_up(request):
+    print(request.user.is_authenticated)
+    print(request.session.items())
+    csrf_token = get_token(request)
+    print(csrf_token)
     if request.method == "POST":
         form = CustomerSignUpForm(request.POST)
         if form.is_valid():
-            validated_address = form.save()
-            user = Customer.objects.get(user=request.user)
+            validated_address = form.save(commit=False)
+            print(request.user.id)
+            user = Customer.objects.get(user=request.user.id)
             user.default_pickup_address = validated_address
+            validated_address.associated_customer = user
+            validated_address.save()
             user.save()
-            return redirect("customer_home")
+            messages.success(request, "Registration successful!")
+            if request.htmx:
+                return HttpResponseClientRedirect("/home/")
         else:
             print(form.errors)
             if request.htmx:
@@ -101,6 +113,7 @@ def login(request):
 
 
 # User logout view that logs the user out
+@login_required(login_url="/")
 def logout(request):
     auth_logout(request)
     messages.success(request, "Logout successful!")
@@ -109,7 +122,11 @@ def logout(request):
 
 @login_required(login_url="/")
 def customer_home(request):
-    return render(request, "customer_home.html")
+    print(request.user.id)
+    print(request.user.is_authenticated)
+    return render(
+        request, "customer_home.html", {"show_navbar": True, "show_footer": True}
+    )
 
 
 @login_required(login_url="/")

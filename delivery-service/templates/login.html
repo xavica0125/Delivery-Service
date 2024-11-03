@@ -9,38 +9,6 @@
     {% crispy form %}
 </div>
 
-<div class="modal fade" id="modals-here" tabindex="-1"
-    aria-labelledby="exampleModalLabel" aria-hidden="true"
-    data-bs-backdrop="static" data-bs-keyboard="false">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-body">
-                <!--<script>
-                    // Function to set CSRF token for HTMX requests
-                    document.addEventListener('htmx:configRequest', (event) => {
-                        const csrfToken = '{{ csrf_token }}';  // Get CSRF token from Django template
-                        event.detail.headers['X-CSRFToken'] = csrfToken; // Set the CSRF token in the headers
-                    });
-                </script>-->
-            </div>
-        </div>
-    </div>
-</div>
 
-<script>
-    document.addEventListener("htmx:afterOnLoad", function (event) {
-        const modalElement = document.getElementById("modals-here");
-        
-        if (event.detail.target.closest("#modals-here")) {
-            const firstNameField = modalElement.querySelector('input[name="first_name"]');
-
-            if (firstNameField) {
-                setTimeout(() => {
-                    firstNameField.focus();
-                }, 410);
-            }
-        }
-    });
-</script>
 
 {% endblock %}
