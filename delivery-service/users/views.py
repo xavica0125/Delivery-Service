@@ -114,4 +114,9 @@ def customer_home(request):
 
 @login_required(login_url="/")
 def create_delivery(request):
-    return render(request, "create_delivery.html", {})
+    form = CreateOrderForm(user=request.user.id)
+    return render(
+        request,
+        "create_delivery.html",
+        {"form": form, "show_navbar": True, "show_footer": True},
+    )
