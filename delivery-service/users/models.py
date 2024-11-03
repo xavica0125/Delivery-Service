@@ -30,6 +30,9 @@ class Address(models.Model):
     )
     state = models.CharField(max_length=2, default="TX", blank=True)
     zip_code = models.PositiveIntegerField()
+    associated_customer = models.ForeignKey(
+        "Customer", on_delete=models.CASCADE, related_name="addresses"
+    )
 
     def __str__(self):
         return f"{self.street_address} {self.sub_premise}, {self.city}, {self.state} {self.zip_code}"
@@ -126,7 +129,7 @@ class ReferenceNumber(models.Model):
 """Model that stores delivery location's information for each customer."""
 
 
-class DeliveryLocation(models.Model):
+class Location(models.Model):
     location_name = models.CharField(
         max_length=15,
     )

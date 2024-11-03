@@ -22,7 +22,7 @@ from delivery_service.settings import EMAIL_HOST_USER
 from django.contrib.sites.shortcuts import get_current_site
 from django.contrib.auth.tokens import default_token_generator
 from .task import send_password_reset_email
-from .models import Customer, Address
+from .models import Customer, Address, Order
 from .utils import validate_customer_address
 
 """User registration form that extends the UserCreationForm from Django's auth module. The form includes fields for first name, last name, email, username, and password."""
@@ -50,7 +50,6 @@ class CreateUserForm(UserCreationForm):
         super(CreateUserForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper(self)
         self.fields["username"].widget.attrs["autofocus"] = False
-        # self.helper.form_action = reverse_lazy("register")
         self.helper.attrs = {
             "hx-post": reverse_lazy("register"),
             "hx-target": "#modals-here .modal-body",
@@ -98,7 +97,7 @@ class CreateUserForm(UserCreationForm):
 """Customer sign up form to fill out additional preferences."""
 
 
-class CustomerSignUpForm(forms.ModelForm):
+class CustomerSignUpForm(forms.ModelForm):  # TODO change name of class
     street_address = forms.CharField(max_length=50, label="Street Address")
     sub_premise = forms.CharField(
         max_length=50, label="Street Address 2 (eg. Building, Apt #)", required=False
@@ -129,11 +128,8 @@ class CustomerSignUpForm(forms.ModelForm):
         self.helper = FormHelper(self)
         # self.helper.form_action = reverse_lazy("customer_sign_up")
         self.helper.attrs = {
-            "hx-post": reverse_lazy(
-                "customer_sign_up"
-            ),  # TODO look into difference between using hx-swap and hx-target
-            # "hx-target": "#modals-here .modal-body",
-            "hx-swap": "innerHTML",
+            "hx-post": reverse_lazy("customer_sign_up"),
+            "hx-target": "#modals-here .modal-body",
         }
         self.helper.layout = Layout(
             Fieldset(
@@ -317,10 +313,28 @@ class Password_Reset_Confirm(SetPasswordForm):
 """Order model form """
 
 
-class CreateOrder(forms.ModelForm):
+class CreateOrderForm(forms.ModelForm):
+    pickup_address = forms.ModelChoiceField(
+        queryset=Address.objects.none(), empty_label=None
+    )
 
-    def __init__(self, *args, **kwargs):
-        super.__init__(*args, **kwargs)
+    class Meta:
+        model = Order
+        fields = (
+            "pickup_address",
+            "delivery_address",
+            "time_window",
+            "weight",
+            "content",
+        )
+
+    def __init__(self, *args, user=None, **kwargs):
+        super().__init__(*args, **kwargs)
+        user = Customer.objects.get(user=user)
+        self.fields["pickup_address"].queryset = user.addresses.all()
+        self.fields["pickup_address"].initial = user.default_pickup_address
         self.helper = FormHelper(self)
         self.helper.form_action = reverse_lazy("create_delivery")
-        self.helper.layout = Layout()
+        self.helper.layout = Layout(
+            Fieldset("Testing", FloatingField("pickup_address"))
+        )
