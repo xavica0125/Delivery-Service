@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, HttpResponse
 from django.contrib import messages
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from .forms import CreateUserForm, CustomerSignUpForm, LoginForm, CreateOrderForm
@@ -95,6 +95,8 @@ def address_confirmation(request):
 
 # User login view that authenticates the user and logs them in
 def login(request):
+    print(request.user.is_authenticated)
+    print(request.session.items())
     if request.method == "POST":
         form = LoginForm(request.POST)
         if form.is_valid():
@@ -116,6 +118,7 @@ def login(request):
 @login_required(login_url="/")
 def logout(request):
     auth_logout(request)
+    request.session.clear()
     messages.success(request, "Logout successful!")
     return redirect("login")
 
@@ -124,9 +127,7 @@ def logout(request):
 def customer_home(request):
     print(request.user.id)
     print(request.user.is_authenticated)
-    return render(
-        request, "customer_home.html", {"show_navbar": True, "show_footer": True}
-    )
+    return render(request, "customer_home.html", {})
 
 
 @login_required(login_url="/")
@@ -135,5 +136,5 @@ def create_delivery(request):
     return render(
         request,
         "create_delivery.html",
-        {"form": form, "show_navbar": True, "show_footer": True},
+        {"form": form},
     )
