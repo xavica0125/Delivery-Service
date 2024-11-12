@@ -1,25 +1,30 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="shadow p-4 mb-5 bg-body rounded">
+    <h3>Please confirm your address:</h3>
 
-<h3>Please confirm your address:</h3>
+    <p>You entered: {{ entered_address }}</p>
+    <p>Suggested address: {{ formatted_address }}</p>
 
-<p>You entered: {{ entered_address }}</p>
-<p>Suggested address: {{ formatted_address }}</p>
-
-<form>
-    {% csrf_token %}
-    <input type="hidden" name="street_address"
-        value="{{ street_address }}">
-    <input type="hidden" name="sub_premise"
-        value="{{ sub_premise }}">
-    <input type="hidden" name="city"
-        value="{{ city }}">
-    <input type="hidden" name="zip_code"
-        value="{{ zip_code }}">
-    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-        <button class="btn btn-secondary" type="button"
-            hx-get="{% url 'customer_sign_up' %}"
-            hx-target="#modals-here .modal-body">Re-enter Address</button>
-        <button class="btn btn-primary" type="submit"
-            hx-post="{% url 'customer_sign_up' %}">Confirm and
-            Submit</button>
-    </div>
-</form>
+    <form>
+        {% csrf_token %}
+        <input type="hidden" name="street_address"
+            value="{{ street_address }}">
+        <input type="hidden" name="sub_premise"
+            value="{{ sub_premise }}">
+        <input type="hidden" name="city"
+            value="{{ city }}">
+        <input type="hidden" name="zip_code"
+            value="{{ zip_code }}">
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            <a href="{% url 'customer_sign_up' %}"
+                class="btn btn-secondary">Re-enter
+                Address</a>
+            <button class="btn btn-primary" type="submit"
+                formaction="{% url 'customer_sign_up' %}"
+                formmethod="post">Confirm and
+                Submit</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

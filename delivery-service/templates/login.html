@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
-{% load crispy_forms_tags %}
 {% block content %}
+{% load crispy_forms_tags %}
 
 <div class="shadow p-4 mb-5 bg-body rounded">
     <h1>Login</h1>
@@ -8,7 +8,5 @@
     {% csrf_token %}
     {% crispy form %}
 </div>
-
-
 
 {% endblock %}

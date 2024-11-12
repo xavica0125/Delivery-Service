@@ -30,7 +30,9 @@ from .utils import validate_customer_address
 
 class CreateUserForm(UserCreationForm):
     email = forms.EmailField(widget=forms.EmailInput())
-    first_name = forms.CharField(max_length=50, widget=forms.TextInput())
+    first_name = forms.CharField(
+        max_length=50, widget=forms.TextInput(attrs={"autofocus": True})
+    )
     last_name = forms.CharField(max_length=50, widget=forms.TextInput())
     phone_number = forms.CharField(max_length=14, widget=forms.TextInput())
     notification_preference = forms.ChoiceField(choices=Customer.ContactChoice)
@@ -49,11 +51,8 @@ class CreateUserForm(UserCreationForm):
     def __init__(self, *args, **kwargs):
         super(CreateUserForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper(self)
-        self.fields["username"].widget.attrs["autofocus"] = False
-        self.helper.attrs = {
-            "hx-post": reverse_lazy("register"),
-            "hx-target": "#modals-here .modal-body",
-        }
+        self.helper.form_action = reverse_lazy("register")
+
         self.helper.layout = Layout(
             Fieldset(
                 "",
@@ -69,12 +68,6 @@ class CreateUserForm(UserCreationForm):
                 FloatingField("password2"),
             ),
             Div(
-                Button(
-                    "close",
-                    "Close",
-                    css_class="btn btn-secondary",
-                    **{"data-bs-dismiss": "modal"},
-                ),
                 Submit(
                     "save",
                     "Sign Me Up",
@@ -126,11 +119,8 @@ class CustomerSignUpForm(forms.ModelForm):  # TODO change name of class
     def __init__(self, *args, **kwargs):
         super(CustomerSignUpForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper(self)
-        # self.helper.form_action = reverse_lazy("customer_sign_up")
-        self.helper.attrs = {
-            "hx-post": reverse_lazy("customer_sign_up"),
-            "hx-target": "#modals-here .modal-body",
-        }
+        self.helper.form_action = reverse_lazy("customer_sign_up")
+
         self.helper.layout = Layout(
             Fieldset(
                 "",
@@ -217,21 +207,9 @@ class LoginForm(forms.Form):
                 ),
                 Div(
                     Submit("submit", "Login", css_class="btn btn-primary"),
-                    Button(
-                        "button",
-                        "Sign Me Up",
-                        css_class="btn btn-secondary",
-                        **{
-                            "hx-get": reverse_lazy(
-                                "register"
-                            ),  # URL to fetch the signup form
-                            "hx-target": "#modals-here .modal-body",
-                            "hx-trigger": "click",
-                            "data-bs-toggle": "modal",
-                            "data-bs-target": "#modals-here",
-                        },
+                    HTML(
+                        '<a href={{ "register" }} class="btn btn-secondary">Sign Up</a>'
                     ),
-                    # css_class="d-grid gap-2 d-md-flex justify-content-md-end",
                     css_class="d-flex gap-2",
                 ),
                 css_class="d-flex justify-content-between align-items-center",

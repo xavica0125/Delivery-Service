@@ -7,7 +7,6 @@ from django.contrib.auth.decorators import login_required
 from django_htmx.http import retarget, HttpResponseClientRedirect
 from django.http import JsonResponse
 from .utils import *
-from django.middleware.csrf import get_token
 
 
 """Registration view that validates the form and saves the user to the database"""
@@ -30,9 +29,7 @@ def register(request):
                 print(request.session.items())
                 return redirect("customer_sign_up")
         else:
-            if request.htmx:
-                response = render(request, "register.html", {"form": form})
-                return retarget(response, "#modals-here .modal-body")
+            return render(request, "register.html", {"form": form})
     else:
         form = CreateUserForm()
     return render(request, "register.html", {"form": form})
@@ -44,8 +41,7 @@ def register(request):
 def customer_sign_up(request):
     print(request.user.is_authenticated)
     print(request.session.items())
-    csrf_token = get_token(request)
-    print(csrf_token)
+
     if request.method == "POST":
         form = CustomerSignUpForm(request.POST)
         if form.is_valid():
@@ -57,22 +53,19 @@ def customer_sign_up(request):
             validated_address.save()
             user.save()
             messages.success(request, "Registration successful!")
-            if request.htmx:
-                return HttpResponseClientRedirect("/home/")
+            return redirect("customer_home")
         else:
             print(form.errors)
-            if request.htmx:
-                if "Confirm your address." in form.non_field_errors():
-                    formatted_address = form.get_formatted_address()
-                    address_components = form.get_address_components()
-                    context = populate_address_context(address_components)
-                    context["formatted_address"] = formatted_address
-                    context["entered_address"] = form.get_entered_address()
-                    response = render(request, "confirm_address.html", context)
-                    return retarget(response, "#modals-here .modal-body")
-                else:
-                    response = render(request, "customer_sign_up.html", {"form": form})
-                    return retarget(response, "#modals-here .modal-body")
+
+            if "Confirm your address." in form.non_field_errors():
+                formatted_address = form.get_formatted_address()
+                address_components = form.get_address_components()
+                context = populate_address_context(address_components)
+                context["formatted_address"] = formatted_address
+                context["entered_address"] = form.get_entered_address()
+                return render(request, "confirm_address.html", context)
+            else:
+                return render(request, "customer_sign_up.html", {"form": form})
     else:
         form = CustomerSignUpForm()
     return render(request, "customer_sign_up.html", {"form": form})
@@ -97,6 +90,7 @@ def address_confirmation(request):
 def login(request):
     print(request.user.is_authenticated)
     print(request.session.items())
+    request.session.flush()
     if request.method == "POST":
         form = LoginForm(request.POST)
         if form.is_valid():
