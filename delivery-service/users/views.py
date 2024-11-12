@@ -100,7 +100,7 @@ def login(request):
             if user is not None:
                 auth_login(request, user)
                 messages.success(request, "Login successful!")
-                return redirect("user_preferences")
+                return redirect("customer_home")
             else:
                 messages.error(request, "Username or password is incorrect.")
     else:
