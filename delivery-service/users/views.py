@@ -126,9 +126,18 @@ def customer_home(request):
 
 @login_required(login_url="/")
 def create_delivery(request):
-    form = CreateOrderForm(user=request.user.id)
-    return render(
-        request,
-        "create_delivery.html",
-        {"form": form},
-    )
+    if request.method == "POST":
+        form = CreateOrderForm(request.POST, user=request.user.id)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Order added succesfully!")
+            return redirect("customer_home")
+        else:
+            return render(request, "register.html", {"form": form})
+    else:
+        form = CreateOrderForm(user=request.user.id)
+        return render(
+            request,
+            "create_delivery.html",
+            {"form": form},
+        )

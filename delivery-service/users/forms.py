@@ -12,6 +12,8 @@ from crispy_forms.layout import (
     Button,
     Layout,
     Fieldset,
+    Row,
+    Column,
     Div,
     HTML,
     ButtonHolder,
@@ -295,6 +297,15 @@ class CreateOrderForm(forms.ModelForm):
     pickup_address = forms.ModelChoiceField(
         queryset=Address.objects.none(), empty_label=None
     )
+    delivery_address = forms.ModelChoiceField(
+        queryset=Address.objects.none(),
+        empty_label="Select a destination",
+    )
+    time_window = forms.ChoiceField(
+        choices=Order.TimeWindow, widget=forms.RadioSelect(), initial=Order.TimeWindow.TWO_HOUR
+    )
+    weight = forms.IntegerField(label="Weight (in pounds)")
+    content = forms.Textarea()
 
     class Meta:
         model = Order
@@ -309,10 +320,67 @@ class CreateOrderForm(forms.ModelForm):
     def __init__(self, *args, user=None, **kwargs):
         super().__init__(*args, **kwargs)
         user = Customer.objects.get(user=user)
-        self.fields["pickup_address"].queryset = user.addresses.all()
+        all_user_addresses = user.addresses.all()
+        self.fields["pickup_address"].queryset = all_user_addresses
         self.fields["pickup_address"].initial = user.default_pickup_address
+        self.fields["delivery_address"].queryset = all_user_addresses
         self.helper = FormHelper(self)
         self.helper.form_action = reverse_lazy("create_delivery")
         self.helper.layout = Layout(
-            Fieldset("Testing", FloatingField("pickup_address"))
+            Div(
+                Div(
+                    Div(
+                        FloatingField("pickup_address"),
+                        HTML(
+                            '<a href={{ "add_new_address" }} class="btn btn-secondary">Add new address</a>'
+                        ),
+                        css_class="col",
+                    ),
+                    css_class="row mb-3",
+                ),
+                Div(
+                    Div(
+                        FloatingField("delivery_address"),
+                        HTML(
+                            '<a href={{ "add_new_address" }} class="btn btn-secondary">Add new address</a>'
+                        ),
+                        css_class="col",
+                    ),
+                    css_class="row mb-3",
+                ),
+                Div(
+                    Div(
+                        "time_window",
+                        css_class="col form-check form-switch",
+                        css_id="switch-group",
+                    ),
+                    css_class="row mb-3",
+                ),
+                Div(
+                    Div(
+                        FloatingField("weight"),
+                    ),
+                    css_class="row mb-3",
+                ),
+                Div(
+                    Div(
+                        FloatingField("content"),
+                    ),
+                    css_class="row mb-3",
+                ),
+                ButtonHolder(
+                    Submit("submit", "Submit", css_class="btn btn-primary"),
+                    css_class="d-grid gap-2 d-md-flex justify-content-md-end",
+                ),
+                css_class="container-fluid",
+            )
         )
+
+    def clean(self):
+        cleaned_data = super().clean()
+        if cleaned_data.get("pickup_address") == cleaned_data.get("delivery_address"):
+            raise forms.ValidationError(
+                "Pickup and delivery address can't be the same."
+            )
+
+        return cleaned_data
