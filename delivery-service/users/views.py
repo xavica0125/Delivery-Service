@@ -48,12 +48,15 @@ def customer_sign_up(request):
             validated_address = form.save(commit=False)
             print(request.user.id)
             user = Customer.objects.get(user=request.user.id)
-            user.default_pickup_address = validated_address
             validated_address.associated_customer = user
             validated_address.save()
-            user.save()
-            messages.success(request, "Registration successful!")
-            return redirect("customer_home")
+            if user.default_pickup_address is None:
+                user.default_pickup_address = validated_address
+                user.save()
+                messages.success(request, "Registration successful!")
+                return redirect("customer_home")
+            else:
+                return redirect("create_delivery")
         else:
             print(form.errors)
 
