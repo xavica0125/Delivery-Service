@@ -302,7 +302,9 @@ class CreateOrderForm(forms.ModelForm):
         empty_label="Select a destination",
     )
     time_window = forms.ChoiceField(
-        choices=Order.TimeWindow, widget=forms.RadioSelect(), initial=Order.TimeWindow.TWO_HOUR
+        choices=Order.TimeWindow,
+        widget=forms.RadioSelect(),
+        initial=Order.TimeWindow.TWO_HOUR,
     )
     weight = forms.IntegerField(label="Weight (in pounds)")
     content = forms.Textarea()
@@ -331,8 +333,11 @@ class CreateOrderForm(forms.ModelForm):
                 Div(
                     Div(
                         FloatingField("pickup_address"),
-                        HTML(
-                            '<a href={{ "add_new_address" }} class="btn btn-secondary">Add new address</a>'
+                        Button(
+                            "add_new_address",
+                            "Add new address",
+                            css_class="btn btn-primary",
+                            onclick=f"location.href='{reverse_lazy('customer_sign_up')}'",
                         ),
                         css_class="col",
                     ),
@@ -341,8 +346,11 @@ class CreateOrderForm(forms.ModelForm):
                 Div(
                     Div(
                         FloatingField("delivery_address"),
-                        HTML(
-                            '<a href={{ "add_new_address" }} class="btn btn-secondary">Add new address</a>'
+                        Button(
+                            "add_new_address",
+                            "Add new address",
+                            css_class="btn btn-primary",
+                            onclick=f"location.href='{reverse_lazy('customer_sign_up')}'",
                         ),
                         css_class="col",
                     ),
@@ -352,7 +360,6 @@ class CreateOrderForm(forms.ModelForm):
                     Div(
                         "time_window",
                         css_class="col form-check form-switch",
-                        css_id="switch-group",
                     ),
                     css_class="row mb-3",
                 ),
