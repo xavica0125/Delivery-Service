@@ -143,3 +143,431 @@
     },
     "responseId": "1e2e2440-c92d-40fc-aa13-89b8ba0c5ef3"
 }
+
+
+routes {
+    legs {
+      distance_meters: 11286
+      duration {
+        seconds: 679
+      }
+      static_duration {
+        seconds: 679
+      }
+      polyline {
+        encoded_polyline: "ka_xDrvdqQSGsBPZbCFVTd@BBFHf@t@Vr@q@ZwAn@eEdBeEhBiH|CoEjBa@PeBr@sF`CiOtGuCnAuB|@iBv@_CbA{CpAkFzBeIjD{B~@sEjBcBj@o@PgCd@e@FiBRo@BcAD{BAaHOk@IyACaAAwCGo@AIV_@pB]fC]~B?HGn@c@~CcBzIY|Ag@jCiBxJARDLGXG^WN]XQF]BYFa@W[UMKc@YYUaAq@IGoEcDa@[oBwAq@Y_@GUDkHlBu@RgAX{Cx@oA\\cAXIBs@P}C~@G@wAb@SFcAXe@N[Jw@TSFuAb@mBl@iDbAg@}BG]I]Kg@Mi@AGE[]eBIa@Q}@]cB{@gEm@yCQ{@ScA}@oEWuAc@{BG[[yAYcB}A}HWmAo@cDm@sC?Ei@oBg@mAO[?AeDiGc@u@qAaCy@uAMSOW_A{Ai@_AS]]q@EIIMSi@{@cCCGm@qB_AsCqD_LOg@}BiHcAsDc@qBgBeLSyAIw@a@{CYsEMyCYaHS}Em@qNCYC{@AY]eIEm@C{@Cc@Ce@M{Ce@wKKcCIeBKcBKkAGw@I{@e@yDKu@Iu@Ga@Is@MaAWqBMgAcBeNM{@Q}A]iB]oAc@qAa@eAgAcC`@_@Z_@HKf@aANYbDiHVi@BG^{@vA}C"
+      }
+      start_location {
+        lat_lng {
+          latitude: 30.310776399999998
+          longitude: -97.35034379999999
+        }
+      }
+      end_location {
+        lat_lng {
+          latitude: 30.361819299999997
+          longitude: -97.3147862
+        }
+      }
+      steps {
+        distance_meters: 78
+        static_duration {
+          seconds: 8
+        }
+        polyline {
+          encoded_polyline: "ka_xDrvdqQSGsBP"
+        }
+        start_location {
+          lat_lng {
+            latitude: 30.310776399999998
+            longitude: -97.35034379999999
+          }
+        }
+        end_location {
+          lat_lng {
+            latitude: 30.311459899999996
+            longitude: -97.3503922
+          }
+        }
+        navigation_instruction {
+          maneuver: DEPART
+          instructions: "Head north on Coneflower Cv toward Wisteria Wy"
+        }
+        localized_values {
+          distance {
+            text: "256 ft"
+          }
+          static_duration {
+            text: "1 min"
+          }
+        }
+        travel_mode: DRIVE
+      }
+      steps {
+        distance_meters: 171
+        static_duration {
+          seconds: 30
+        }
+        polyline {
+          encoded_polyline: "se_xD|vdqQZbCFVTd@BBFHf@t@Vr@"
+        }
+        start_location {
+          lat_lng {
+            latitude: 30.311459899999996
+            longitude: -97.3503922
+          }
+        }
+        end_location {
+          lat_lng {
+            latitude: 30.310790599999997
+            longitude: -97.3519632
+          }
+        }
+        navigation_instruction {
+          maneuver: TURN_LEFT
+          instructions: "Turn left onto Wisteria Wy"
+        }
+        localized_values {
+          distance {
+            text: "0.1 mi"
+          }
+          static_duration {
+            text: "1 min"
+          }
+        }
+        travel_mode: DRIVE
+      }
+      steps {
+        distance_meters: 2874
+        static_duration {
+          seconds: 140
+        }
+        polyline {
+          encoded_polyline: "ma_xDv`eqQq@ZwAn@eEdBeEhBiH|CoEjBa@PeBr@sF`CiOtGuCnAuB|@iBv@_CbA{CpAkFzBeIjD{B~@sEjBcBj@o@PgCd@e@FiBRo@BcAD{BAaHOk@IyACaAAwCG"
+        }
+        start_location {
+          lat_lng {
+            latitude: 30.310790599999997
+            longitude: -97.3519632
+          }
+        }
+        end_location {
+          lat_lng {
+            latitude: 30.3348268
+            longitude: -97.3616589
+          }
+        }
+        navigation_instruction {
+          maneuver: TURN_RIGHT
+          instructions: "Turn right onto State Hwy 95 N"
+        }
+        localized_values {
+          distance {
+            text: "1.8 mi"
+          }
+          static_duration {
+            text: "2 mins"
+          }
+        }
+        travel_mode: DRIVE
+      }
+      steps {
+        distance_meters: 867
+        static_duration {
+          seconds: 66
+        }
+        polyline {
+          encoded_polyline: "uwcxDj}fqQo@AIV_@pB]fC]~B?HGn@c@~CcBzIY|Ag@jCiBxJARDLGXG^"
+        }
+        start_location {
+          lat_lng {
+            latitude: 30.3348268
+            longitude: -97.3616589
+          }
+        }
+        end_location {
+          lat_lng {
+            latitude: 30.337222899999997
+            longitude: -97.370009
+          }
+        }
+        navigation_instruction {
+          maneuver: TURN_LEFT
+          instructions: "Turn left onto Hwy 290 E"
+        }
+        localized_values {
+          distance {
+            text: "0.5 mi"
+          }
+          static_duration {
+            text: "1 min"
+          }
+        }
+        travel_mode: DRIVE
+      }
+      steps {
+        distance_meters: 459
+        static_duration {
+          seconds: 36
+        }
+        polyline {
+          encoded_polyline: "sfdxDpqhqQWN]XQF]BYFa@W[UMKc@YYUaAq@IGoEcDa@[oBwA"
+        }
+        start_location {
+          lat_lng {
+            latitude: 30.337222899999997
+            longitude: -97.370009
+          }
+        }
+        end_location {
+          lat_lng {
+            latitude: 30.3406952
+            longitude: -97.3681045
+          }
+        }
+        navigation_instruction {
+          maneuver: TURN_RIGHT
+          instructions: "Turn right onto Harris St"
+        }
+        localized_values {
+          distance {
+            text: "0.3 mi"
+          }
+          static_duration {
+            text: "1 min"
+          }
+        }
+        travel_mode: DRIVE
+      }
+      steps {
+        distance_meters: 1024
+        static_duration {
+          seconds: 91
+        }
+        polyline {
+          encoded_polyline: "k|dxDrehqQq@Y_@GUDkHlBu@RgAX{Cx@oA\\cAXIBs@P}C~@G@wAb@SFcAXe@N[Jw@TSFuAb@mBl@iDbA"
+        }
+        start_location {
+          lat_lng {
+            latitude: 30.3406952
+            longitude: -97.3681045
+          }
+        }
+        end_location {
+          lat_lng {
+            latitude: 30.349427199999997
+            longitude: -97.3711434
+          }
+        }
+        navigation_instruction {
+          maneuver: TURN_LEFT
+          instructions: "Turn left onto S Main St"
+        }
+        localized_values {
+          distance {
+            text: "0.6 mi"
+          }
+          static_duration {
+            text: "2 mins"
+          }
+        }
+        travel_mode: DRIVE
+      }
+      steps {
+        distance_meters: 2320
+        static_duration {
+          seconds: 127
+        }
+        polyline {
+          encoded_polyline: "}rfxDrxhqQg@}BG]I]Kg@Mi@AGE[]eBIa@Q}@]cB{@gEm@yCQ{@ScA}@oEWuAc@{BG[[yAYcB}A}HWmAo@cDm@sC?Ei@oBg@mAO[?AeDiGc@u@qAaCy@uAMSOW_A{Ai@_AS]]q@EIIMSi@{@cCCGm@qB_AsCqD_L"
+        }
+        start_location {
+          lat_lng {
+            latitude: 30.349427199999997
+            longitude: -97.3711434
+          }
+        }
+        end_location {
+          lat_lng {
+            latitude: 30.3580959
+            longitude: -97.349366199999992
+          }
+        }
+        navigation_instruction {
+          maneuver: TURN_RIGHT
+          instructions: "Turn right onto E 2nd St"
+        }
+        localized_values {
+          distance {
+            text: "1.4 mi"
+          }
+          static_duration {
+            text: "2 mins"
+          }
+        }
+        travel_mode: DRIVE
+      }
+      steps {
+        distance_meters: 3062
+        static_duration {
+          seconds: 124
+        }
+        polyline {
+          encoded_polyline: "cihxDppdqQOg@}BiHcAsDc@qBgBeLSyAIw@a@{CYsEMyCYaHS}Em@qNCYC{@AY]eIEm@C{@Cc@Ce@M{Ce@wKKcCIeBKcBKkAGw@I{@e@yDKu@Iu@Ga@Is@MaAWqBMgAcBeNM{@Q}A]iB]oAc@qAa@eAgAcC"
+        }
+        start_location {
+          lat_lng {
+            latitude: 30.3580959
+            longitude: -97.349366199999992
+          }
+        }
+        end_location {
+          lat_lng {
+            latitude: 30.364021700000002
+            longitude: -97.3184617
+          }
+        }
+        navigation_instruction {
+          maneuver: NAME_CHANGE
+          instructions: "Continue onto FM3000/FM 3000 Farm-To-Market Rd\nContinue to follow FM3000"
+        }
+        localized_values {
+          distance {
+            text: "1.9 mi"
+          }
+          static_duration {
+            text: "2 mins"
+          }
+        }
+        travel_mode: DRIVE
+      }
+      steps {
+        distance_meters: 108
+        static_duration {
+          seconds: 24
+        }
+        polyline {
+          encoded_polyline: "cnixDjo~pQ`@_@Z_@HKf@aANY"
+        }
+        start_location {
+          lat_lng {
+            latitude: 30.364021700000002
+            longitude: -97.3184617
+          }
+        }
+        end_location {
+          lat_lng {
+            latitude: 30.363383199999994
+            longitude: -97.3176189
+          }
+        }
+        navigation_instruction {
+          maneuver: TURN_RIGHT
+          instructions: "Turn right toward Fawn Holw"
+        }
+        localized_values {
+          distance {
+            text: "354 ft"
+          }
+          static_duration {
+            text: "1 min"
+          }
+        }
+        travel_mode: DRIVE
+      }
+      steps {
+        distance_meters: 323
+        static_duration {
+          seconds: 33
+        }
+        polyline {
+          encoded_polyline: "cjixDbj~pQbDiHVi@BG^{@vA}C"
+        }
+        start_location {
+          lat_lng {
+            latitude: 30.363383199999994
+            longitude: -97.3176189
+          }
+        }
+        end_location {
+          lat_lng {
+            latitude: 30.361819299999997
+            longitude: -97.3147862
+          }
+        }
+        navigation_instruction {
+          maneuver: NAME_CHANGE
+          instructions: "Continue onto Fawn Holw\nDestination will be on the right"
+        }
+        localized_values {
+          distance {
+            text: "0.2 mi"
+          }
+          static_duration {
+            text: "1 min"
+          }
+        }
+        travel_mode: DRIVE
+      }
+      localized_values {
+        distance {
+          text: "7.0 mi"
+        }
+        duration {
+          text: "11 mins"
+        }
+        static_duration {
+          text: "11 mins"
+        }
+      }
+    }
+    distance_meters: 11286
+    duration {
+      seconds: 679
+    }
+    static_duration {
+      seconds: 679
+    }
+    polyline {
+      encoded_polyline: "ka_xDrvdqQSGsBPZbCFVTd@BBFHf@t@Vr@q@ZwAn@eEdBeEhBiH|CoEjBa@PeBr@sF`CiOtGuCnAuB|@iBv@_CbA{CpAkFzBeIjD{B~@sEjBcBj@o@PgCd@e@FiBRo@BcAD{BAaHOk@IyACaAAwCGo@AIV_@pB]fC]~B?HGn@c@~CcBzIY|Ag@jCiBxJARDLGXG^WN]XQF]BYFa@W[UMKc@YYUaAq@IGoEcDa@[oBwAq@Y_@GUDkHlBu@RgAX{Cx@oA\\cAXIBs@P}C~@G@wAb@SFcAXe@N[Jw@TSFuAb@mBl@iDbAg@}BG]I]Kg@Mi@AGE[]eBIa@Q}@]cB{@gEm@yCQ{@ScA}@oEWuAc@{BG[[yAYcB}A}HWmAo@cDm@sC?Ei@oBg@mAO[?AeDiGc@u@qAaCy@uAMSOW_A{Ai@_AS]]q@EIIMSi@{@cCCGm@qB_AsCqD_LOg@}BiHcAsDc@qBgBeLSyAIw@a@{CYsEMyCYaHS}Em@qNCYC{@AY]eIEm@C{@Cc@Ce@M{Ce@wKKcCIeBKcBKkAGw@I{@e@yDKu@Iu@Ga@Is@MaAWqBMgAcBeNM{@Q}A]iB]oAc@qAa@eAgAcC`@_@Z_@HKf@aANYbDiHVi@BG^{@vA}C"
+    }
+    description: "State Hwy 95 N and FM3000"
+    viewport {
+      low {
+        latitude: 30.310776399999998
+        longitude: -97.3711434
+      }
+      high {
+        latitude: 30.364021700000002
+        longitude: -97.3147862
+      }
+    }
+    travel_advisory {
+    }
+    localized_values {
+      distance {
+        text: "7.0 mi"
+      }
+      duration {
+        text: "11 mins"
+      }
+      static_duration {
+        text: "11 mins"
+      }
+    }
+    route_labels: DEFAULT_ROUTE
+  }
+  geocoding_results {
+    origin {
+      geocoder_status {
+      }
+      type_: "premise"
+      place_id: "ChIJW6DIjVeTRIYRMAPATh7vzsg"
+    }
+    destination {
+      geocoder_status {
+      }
+      type_: "street_address"
+      place_id: "ChIJESiHl_vsRIYR1Fkgao3mEg8"
+    }
+  }

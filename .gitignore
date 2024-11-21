@@ -4,4 +4,5 @@ db.sqlite3
 migrations
 .env
 service_account.json
+test.json
 /workspaces/Delivery-Service/delivery-service/credentials
