@@ -124,6 +124,8 @@ def logout(request):
 def customer_home(request):
     print(request.user.id)
     print(request.user.is_authenticated)
+    print(calculate_route())
+
     return render(request, "customer_home.html", {})
 
 

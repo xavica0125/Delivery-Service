@@ -1,9 +1,8 @@
 from django.conf import settings
-from google.maps import addressvalidation_v1
+from google.maps import addressvalidation_v1, routing_v2
 import googlemaps
 from google.type import postal_address_pb2
 from google.oauth2 import service_account
-
 
 """Creates validation request and returns validation action and response from validation request. """
 
@@ -78,3 +77,20 @@ def populate_address_context(address_components, context={}):
             context["zip_code"] = component.component_name.text
 
     return context
+
+
+def calculate_route():
+    client = routing_v2.RoutesClient()
+
+    origin = routing_v2.Waypoint(address="109 Coneflower Cv., Elgin, TX 78621")
+    destination = routing_v2.Waypoint(address="153 Fawn Hollow, Elgin, TX 78621")
+
+    request = routing_v2.ComputeRoutesRequest(origin=origin, destination=destination)
+
+    fieldMask = "formattedAddress,displayName"
+
+    response = client.compute_routes(
+        request=request, metadata=[("x-goog-fieldmask", "routes.localized_values")]
+    )
+
+    return response
