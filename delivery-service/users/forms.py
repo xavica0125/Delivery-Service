@@ -375,11 +375,21 @@ class CreateOrderForm(forms.ModelForm):
                     ),
                     css_class="row mb-3",
                 ),
+                Div(css_id="price-div"),
                 ButtonHolder(
+                    Button(
+                        "calculate_price",
+                        "Calculate Price",
+                        css_class="btn btn-secondary",
+                        **{
+                            "hx-get": reverse_lazy("calculate_price"),
+                            "hx-target": "#price-div",
+                            "hx-trigger": "click",
+                        },
+                    ),
                     Submit("submit", "Submit", css_class="btn btn-primary"),
                     css_class="d-grid gap-2 d-md-flex justify-content-md-end",
                 ),
-                css_class="container-fluid",
             )
         )
 

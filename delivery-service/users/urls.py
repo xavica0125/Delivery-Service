@@ -37,4 +37,5 @@ urlpatterns = [
         ),
         name="password_reset_confirm",
     ),
+    path("calculate_price/", views.calculate_price, name="calculate_price"),
 ]

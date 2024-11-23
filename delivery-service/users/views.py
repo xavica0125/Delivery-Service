@@ -146,3 +146,7 @@ def create_delivery(request):
             "create_delivery.html",
             {"form": form},
         )
+
+
+def calculate_price(request):
+    return render(request, "calculate_price.html", {})
