@@ -8,6 +8,8 @@
 
     <form>
         {% csrf_token %}
+        <input type="hidden" name="location_name"
+            value="{{ location_name }}">
         <input type="hidden" name="street_address"
             value="{{ street_address }}">
         <input type="hidden" name="sub_premise"

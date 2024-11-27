@@ -21,6 +21,9 @@ class UserProfile(models.Model):
 
 
 class Address(models.Model):
+    location_name = models.CharField(
+        max_length=50,
+    )
     street_address = models.CharField(
         max_length=50,
     )
@@ -35,7 +38,7 @@ class Address(models.Model):
     )
 
     def __str__(self):
-        return f"{self.street_address} {self.sub_premise}, {self.city}, {self.state} {self.zip_code}"
+        return f"{self.street_address} {self.sub_premise}, {self.city}, {self.state} {self.zip_code} ({self.location_name})"
 
 
 """Customer model that holds relevant information. Relationship with User model is defined as OneToOneField using user_id as the primary key/foreign key."""
@@ -52,7 +55,6 @@ class Customer(UserProfile):
         EMAIL = "Email"
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    notification_preference = models.CharField(max_length=15, choices=ContactChoice)
     date_created = models.DateTimeField(auto_now_add=True)
     default_pickup_address = models.OneToOneField(
         Address, on_delete=models.CASCADE, null=True

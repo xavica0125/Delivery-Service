@@ -37,7 +37,6 @@ class CreateUserForm(UserCreationForm):
     )
     last_name = forms.CharField(max_length=50, widget=forms.TextInput())
     phone_number = forms.CharField(max_length=14, widget=forms.TextInput())
-    notification_preference = forms.ChoiceField(choices=Customer.ContactChoice)
 
     class Meta:
         model = User
@@ -65,7 +64,6 @@ class CreateUserForm(UserCreationForm):
                 FloatingField(
                     "phone_number"
                 ),  # TODO phone number formatting is not always applied
-                FloatingField("notification_preference"),
                 FloatingField("password1"),
                 FloatingField("password2"),
             ),
@@ -81,11 +79,9 @@ class CreateUserForm(UserCreationForm):
 
     def create_customer(self, user):
         phone_number = self.cleaned_data.get("phone_number")
-        notification_preference = self.cleaned_data.get("notification_preference")
         customer = Customer.objects.create(
             user=user,
             phone_number=phone_number,
-            notification_preference=notification_preference,
         )
 
 
@@ -93,6 +89,7 @@ class CreateUserForm(UserCreationForm):
 
 
 class CustomerSignUpForm(forms.ModelForm):  # TODO change name of class
+    location_name = forms.CharField(max_length=50, label="Location Name")
     street_address = forms.CharField(max_length=50, label="Street Address")
     sub_premise = forms.CharField(
         max_length=50, label="Street Address 2 (eg. Building, Apt #)", required=False
@@ -111,6 +108,7 @@ class CustomerSignUpForm(forms.ModelForm):  # TODO change name of class
     class Meta:
         model = Address
         fields = (
+            "location_name",
             "street_address",
             "sub_premise",
             "city",
@@ -126,6 +124,7 @@ class CustomerSignUpForm(forms.ModelForm):  # TODO change name of class
         self.helper.layout = Layout(
             Fieldset(
                 "",
+                FloatingField("location_name"),
                 FloatingField("street_address"),
                 FloatingField("sub_premise"),
                 FloatingField("city"),
@@ -375,7 +374,6 @@ class CreateOrderForm(forms.ModelForm):
                     ),
                     css_class="row mb-3",
                 ),
-                Div(css_id="price-div"),
                 ButtonHolder(
                     Button(
                         "calculate_price",

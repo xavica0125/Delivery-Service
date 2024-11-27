@@ -66,6 +66,7 @@ def customer_sign_up(request):
                 context = populate_address_context(address_components)
                 context["formatted_address"] = formatted_address
                 context["entered_address"] = form.get_entered_address()
+                context["location_name"] = request.POST.get("location_name")
                 return render(request, "confirm_address.html", context)
             else:
                 return render(request, "customer_sign_up.html", {"form": form})
