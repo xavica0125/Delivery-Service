@@ -382,9 +382,10 @@ class CreateOrderForm(forms.ModelForm):
                         "Calculate Price",
                         css_class="btn btn-secondary",
                         **{
-                            "hx-get": reverse_lazy("calculate_price"),
+                            "hx-post": reverse_lazy("calculate_price"),
                             "hx-target": "#price-div",
                             "hx-trigger": "click",
+                            "hx-swap": "innerHTML",
                         },
                     ),
                     Submit("submit", "Submit", css_class="btn btn-primary"),

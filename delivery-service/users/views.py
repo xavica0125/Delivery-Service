@@ -124,7 +124,6 @@ def logout(request):
 def customer_home(request):
     print(request.user.id)
     print(request.user.is_authenticated)
-    print(calculate_route())
 
     return render(request, "customer_home.html", {})
 
@@ -149,4 +148,6 @@ def create_delivery(request):
 
 
 def calculate_price(request):
-    return render(request, "calculate_price.html", {})
+    response = price_calculation(request)
+
+    return render(request, "calculate_price.html", {"polyline": response})

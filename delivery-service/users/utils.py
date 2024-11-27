@@ -3,6 +3,7 @@ from google.maps import addressvalidation_v1, routing_v2
 import googlemaps
 from google.type import postal_address_pb2
 from google.oauth2 import service_account
+from .models import Address
 
 """Creates validation request and returns validation action and response from validation request. """
 
@@ -36,7 +37,7 @@ def validate_customer_address(cust_address, city, zip_code):
     request = addressvalidation_v1.ValidateAddressRequest(address=address)
     # Make the request
     response = client.validate_address(request=request)
-    # print(response)
+    print(response)
     return (suggest_validation_action(response), response)
 
 
@@ -79,18 +80,37 @@ def populate_address_context(address_components, context={}):
     return context
 
 
-def calculate_route():
+def calculate_route(origin_address, destination_address):
     client = routing_v2.RoutesClient()
 
-    origin = routing_v2.Waypoint(address="109 Coneflower Cv., Elgin, TX 78621")
-    destination = routing_v2.Waypoint(address="153 Fawn Hollow, Elgin, TX 78621")
+    origin = routing_v2.Waypoint(address=origin_address)
+    destination = routing_v2.Waypoint(address=destination_address)
 
     request = routing_v2.ComputeRoutesRequest(origin=origin, destination=destination)
 
     fieldMask = "formattedAddress,displayName"
 
     response = client.compute_routes(
-        request=request, metadata=[("x-goog-fieldmask", "routes.localized_values")]
+        request=request,
+        metadata=[
+            (
+                "x-goog-fieldmask",
+                "routes.localized_values,routes.polyline.encoded_polyline",
+            )
+        ],
     )
+    encoded_polyline = response.routes[0].polyline.encoded_polyline
+    print(type(response.routes[0].polyline))
+    return encoded_polyline
+
+
+def price_calculation(request):
+    origin_id = request.POST.get("pickup_address")
+    destination_id = request.POST.get("delivery_address")
+
+    origin_address = str(Address.objects.get(id=origin_id))
+    destination_address = str(Address.objects.get(id=destination_id))
+
+    response = calculate_route(origin_address, destination_address)
 
     return response

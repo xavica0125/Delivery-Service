@@ -1,17 +1,26 @@
 {% extends 'base.html' %}
-
 {% block content %}
 <div class="container-fluid">
-    <div class="row">
-        <div class="shadow p-4 mb-5 bg-body rounded">
+    <div class="shadow p-4 mb-5 bg-body rounded">
+
+        <div class="row">
+
             <div class="col-6">
                 <h1>Enter delivery information</h1>
 
                 {% load crispy_forms_tags %}
                 {% csrf_token %}
                 {% crispy form %}
+                <div id="price-div"></div>
             </div>
+            <div class="col-6 d-flex">
+                <div id="map"
+                    style="flex-grow: 1; height: auto;"></div>
+            </div>
+
         </div>
+
     </div>
 </div>
+
 {% endblock %}
