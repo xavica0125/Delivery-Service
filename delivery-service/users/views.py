@@ -1,7 +1,13 @@
 from django.shortcuts import render, redirect, HttpResponse
 from django.contrib import messages
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
-from .forms import CreateUserForm, CustomerSignUpForm, LoginForm, CreateOrderForm
+from .forms import (
+    CreateUserForm,
+    CustomerSignUpForm,
+    LoginForm,
+    CreateOrderForm,
+    ContactForm,
+)
 from .models import *
 from django.contrib.auth.decorators import login_required
 from django_htmx.http import retarget, HttpResponseClientRedirect
@@ -50,6 +56,11 @@ def customer_sign_up(request):
             user = Customer.objects.get(user=request.user.id)
             validated_address.associated_customer = user
             validated_address.save()
+            Contact.objects.create(
+                contact_name=request.POST.get("contact_name"),
+                phone_number=request.POST.get("phone_number"),
+                address=validated_address,
+            )
             if user.default_pickup_address is None:
                 user.default_pickup_address = validated_address
                 user.save()
@@ -67,6 +78,8 @@ def customer_sign_up(request):
                 context["formatted_address"] = formatted_address
                 context["entered_address"] = form.get_entered_address()
                 context["location_name"] = request.POST.get("location_name")
+                context["contact_name"] = request.POST.get("contact_name")
+                context["phone_number"] = request.POST.get("phone_number")
                 return render(request, "confirm_address.html", context)
             else:
                 return render(request, "customer_sign_up.html", {"form": form})
@@ -148,7 +161,41 @@ def create_delivery(request):
         )
 
 
+@login_required(login_url="/")
 def calculate_price(request):
     response = price_calculation(request)
 
     return render(request, "calculate_price.html", {"polyline": response})
+
+
+@login_required(login_url="/")
+def add_contact(request):
+    if request.method == "POST":
+        form = ContactForm(
+            request.POST, delivery_address_pk=request.POST.get("address")
+        )
+        if form.is_valid():
+            contact_instance = form.save(commit=False)
+            contact_instance.phone_number = request.POST.get("phone_number")
+            contact_instance.save()
+            messages.success(request, "Contact successfully added!")
+            return redirect("create_delivery")
+    else:
+        delivery_address = request.GET.get("delivery_address")
+        form = ContactForm(delivery_address_pk=delivery_address)
+        return render(
+            request,
+            "create_contact.html",
+            {"form": form},
+        )
+
+
+@login_required(login_url="/")
+def contact_options(request):
+    delivery_address = request.GET.get("delivery_address")
+    contact_list = Contact.objects.filter(address=delivery_address)
+    return render(
+        request,
+        "contact_options.html",
+        {"context": contact_list, "delivery_address": delivery_address},
+    )

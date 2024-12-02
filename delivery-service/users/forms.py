@@ -24,7 +24,7 @@ from delivery_service.settings import EMAIL_HOST_USER
 from django.contrib.sites.shortcuts import get_current_site
 from django.contrib.auth.tokens import default_token_generator
 from .task import send_password_reset_email
-from .models import Customer, Address, Order
+from .models import Customer, Address, Order, Contact
 from .utils import validate_customer_address
 
 """User registration form that extends the UserCreationForm from Django's auth module. The form includes fields for first name, last name, email, username, and password."""
@@ -36,7 +36,7 @@ class CreateUserForm(UserCreationForm):
         max_length=50, widget=forms.TextInput(attrs={"autofocus": True})
     )
     last_name = forms.CharField(max_length=50, widget=forms.TextInput())
-    phone_number = forms.CharField(max_length=14, widget=forms.TextInput())
+    # phone_number = forms.CharField(max_length=14, widget=forms.TextInput())
 
     class Meta:
         model = User
@@ -61,9 +61,6 @@ class CreateUserForm(UserCreationForm):
                 FloatingField("last_name"),
                 FloatingField("username"),
                 FloatingField("email"),
-                FloatingField(
-                    "phone_number"
-                ),  # TODO phone number formatting is not always applied
                 FloatingField("password1"),
                 FloatingField("password2"),
             ),
@@ -104,6 +101,10 @@ class CustomerSignUpForm(forms.ModelForm):  # TODO change name of class
     zip_code = forms.CharField(max_length=10, label="Zip Code")
     validation_action, validation_response = None, None
     formatted_entered_address = ""
+    contact_name = forms.CharField(
+        max_length=50, widget=forms.TextInput(attrs={"autofocus": True})
+    )
+    phone_number = forms.CharField(max_length=14, widget=forms.TextInput())
 
     class Meta:
         model = Address
@@ -130,6 +131,9 @@ class CustomerSignUpForm(forms.ModelForm):  # TODO change name of class
                 FloatingField("city"),
                 FloatingField("state"),
                 FloatingField("zip_code"),
+                HTML("<h2>Enter contact information </h2>"),
+                FloatingField("contact_name"),
+                FloatingField("phone_number"),
             ),
             Div(
                 Submit("submit", "Submit", css_class="btn btn-primary"),
@@ -316,6 +320,7 @@ class CreateOrderForm(forms.ModelForm):
             "time_window",
             "weight",
             "content",
+            "contact",
         )
 
     def __init__(self, *args, user=None, **kwargs):
@@ -324,6 +329,7 @@ class CreateOrderForm(forms.ModelForm):
         all_user_addresses = user.addresses.all()
         self.fields["pickup_address"].queryset = all_user_addresses
         self.fields["pickup_address"].initial = user.default_pickup_address
+
         self.fields["delivery_address"].queryset = all_user_addresses
         self.helper = FormHelper(self)
         self.helper.form_action = reverse_lazy("create_delivery")
@@ -332,19 +338,19 @@ class CreateOrderForm(forms.ModelForm):
                 Div(
                     Div(
                         FloatingField("pickup_address"),
-                        Button(
-                            "add_new_address",
-                            "Add new address",
-                            css_class="btn btn-primary",
-                            onclick=f"location.href='{reverse_lazy('customer_sign_up')}'",
-                        ),
                         css_class="col",
                     ),
                     css_class="row mb-3",
                 ),
                 Div(
                     Div(
-                        FloatingField("delivery_address"),
+                        FloatingField(
+                            "delivery_address",
+                            **{
+                                "hx-get": reverse_lazy("contact_options"),
+                                "hx-target": "#contact-options",
+                            },
+                        ),
                         Button(
                             "add_new_address",
                             "Add new address",
@@ -355,6 +361,7 @@ class CreateOrderForm(forms.ModelForm):
                     ),
                     css_class="row mb-3",
                 ),
+                Div(Div(css_id="contact-options", css_class="form-floating mb-3")),
                 Div(
                     Div(
                         "time_window",
@@ -400,3 +407,42 @@ class CreateOrderForm(forms.ModelForm):
             )
 
         return cleaned_data
+
+
+class ContactForm(forms.ModelForm):
+    contact_name = forms.CharField(
+        max_length=50, widget=forms.TextInput(attrs={"autofocus": True})
+    )
+    phone_number = forms.CharField(max_length=14, widget=forms.TextInput())
+    address = forms.ModelChoiceField(
+        queryset=Address.objects.all(), widget=forms.HiddenInput()
+    )
+
+    class Meta:
+        model = Contact
+        fields = ["contact_name", "address"]
+
+    def __init__(self, *args, delivery_address_pk=None, **kwargs):
+        super().__init__(*args, **kwargs)
+        address_instance = Address.objects.get(pk=delivery_address_pk)
+        print(type(address_instance))
+        self.fields["address"].initial = address_instance
+
+        self.helper = FormHelper(self)
+        self.helper.form_action = reverse_lazy("create_contact")
+        self.helper.layout = Layout(
+            Fieldset(
+                "",
+                FloatingField("contact_name"),
+                FloatingField("phone_number"),
+                "address",
+            ),
+            Div(
+                Submit(
+                    "submit",
+                    "Submit",
+                    css_class="btn btn-primary",
+                ),
+                css_class="d-grid gap-2 d-md-flex justify-content-md-end",
+            ),
+        )

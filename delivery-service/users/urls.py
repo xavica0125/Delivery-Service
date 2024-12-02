@@ -13,6 +13,8 @@ urlpatterns = [
     ),
     path("home/", views.customer_home, name="customer_home"),
     path("create_delivery/", views.create_delivery, name="create_delivery"),
+    path("add_contact/", views.add_contact, name="create_contact"),
+    path("contact_options/", views.contact_options, name="contact_options"),
     path(
         "reset_password/",
         auth_views.PasswordResetView.as_view(

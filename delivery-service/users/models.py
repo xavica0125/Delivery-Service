@@ -14,7 +14,7 @@ class UserProfile(models.Model):
     class Meta:
         abstract = True
 
-    phone_number = PhoneNumberField()
+    phone_number = PhoneNumberField(null=True)
 
 
 """Model stores pickup/delivery location physical address."""
@@ -49,10 +49,6 @@ class Customer(UserProfile):
         permissions = [
             ("can_place_delivery", "Can place delivery orders"),
         ]
-
-    class ContactChoice(models.TextChoices):
-        MOBILE = "Phone Call"
-        EMAIL = "Email"
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     date_created = models.DateTimeField(auto_now_add=True)
@@ -118,6 +114,7 @@ class Order(models.Model):
     delivery_address = models.ForeignKey(
         Address, on_delete=models.SET_NULL, null=True, related_name="delivery_orders"
     )
+    contact = models.ForeignKey("Contact", on_delete=models.CASCADE)
 
 
 """Model that stores reference numbers used by customers and are associated via foreign key with the Order model's primary key."""
@@ -131,12 +128,14 @@ class ReferenceNumber(models.Model):
 """Model that stores delivery location's information for each customer."""
 
 
-class Location(models.Model):
-    location_name = models.CharField(
-        max_length=15,
+class Contact(models.Model):
+    contact_name = models.CharField(
+        max_length=50,
     )
-    poc_name = models.CharField(
-        max_length=15,
+    phone_number = PhoneNumberField()
+    address = models.ForeignKey(
+        Address, on_delete=models.CASCADE, related_name="contacts"
     )
-    poc_phone_number = PhoneNumberField()
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.contact_name} {self.phone_number}"

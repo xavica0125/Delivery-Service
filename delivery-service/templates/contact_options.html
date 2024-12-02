@@ -1,0 +1,15 @@
+{% block content %}
+
+<select class="form-select" id="contact-select" aria-label="Contact select">
+    <option selected>Select a contact</option>
+    {% for contact in context %}
+    <option value="{{contact}}">{{ contact }}</option>
+    {% endfor %}
+</select>
+<label for="contact-select">Contact</label>
+<div class="mb-3"></div>
+<button value="{{ delivery_address }}" class="btn btn-primary"
+    onclick="location.href = '/add_contact?delivery_address=' + this.value;">Add
+    new
+    contact </button>
+{% endblock %}
