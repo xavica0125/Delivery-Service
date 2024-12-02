@@ -8,19 +8,6 @@
     {% csrf_token %}
     {% crispy form %}
 </div>
-<script
-    src="https://unpkg.com/cleave-zen@0.0.17/dist/cleave-zen.umd.js"></script>
 
-<script>
-        const blocksInput = document.querySelector('input[name="phone_number"]');  
-        blocksInput.addEventListener('input', (e) => {
-            blocksInput.value = cleaveZen.formatGeneral(e.target.value, {
-    blocks: [0, 3, 3, 4],
-    delimiters: ['(', ') ', '-'],
-    delimiterLazyShow: true,
-    numericOnly: true
-});
-        });
-</script>
 
 {% endblock %}
