@@ -100,6 +100,21 @@
     <script async
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBTj5KY7wtweHS3ihpqEnPQXTe9Kisy3DQ&loading=async&libraries=geometry,marker&callback=initMap">
     </script>
+
+    <script
+      src="https://unpkg.com/cleave-zen@0.0.17/dist/cleave-zen.umd.js"></script>
+
+    <script>
+    const blocksInput = document.querySelector('input[name="phone_number"]');  
+    blocksInput.addEventListener('input', (e) => {
+        blocksInput.value = cleaveZen.formatGeneral(e.target.value, {
+blocks: [0, 3, 3, 4],
+delimiters: ['(', ') ', '-'],
+delimiterLazyShow: true,
+numericOnly: true
+});
+    });
+</script>
     {% include 'footer.html' %}
   </body>
 </html>
