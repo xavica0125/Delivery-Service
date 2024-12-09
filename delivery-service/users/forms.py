@@ -324,6 +324,7 @@ class CreateOrderForm(forms.ModelForm):
         choices=Order.TimeWindow,
         widget=forms.RadioSelect(),
         initial=Order.TimeWindow.TWO_HOUR,
+        label="",
     )
     weight = forms.IntegerField(label="Weight (in pounds)")
     content = forms.Textarea()
@@ -379,6 +380,10 @@ class CreateOrderForm(forms.ModelForm):
                 ),
                 Div(Div(css_id="contact-options", css_class="form-floating mb-3")),
                 Div(
+                    Div(
+                        HTML("<h4>Time Window</h4>"),
+                        css_class="d-grid gap-2 d-md-flex justify-content-md-start",
+                    ),
                     Div(
                         "time_window",
                         css_class="col form-check form-switch",
