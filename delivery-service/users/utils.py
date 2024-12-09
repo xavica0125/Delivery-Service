@@ -79,16 +79,15 @@ def populate_address_context(address_components, context={}):
 
     return context
 
+"""Calls Google Maps API to get distance and encoded polyline."""
 
 def calculate_route(origin_address, destination_address):
     client = routing_v2.RoutesClient()
 
-    origin = routing_v2.Waypoint(address=origin_address)
-    destination = routing_v2.Waypoint(address=destination_address)
+    origin = routing_v2.Waypoint(place_id=origin_address)
+    destination = routing_v2.Waypoint(place_id=destination_address)
 
     request = routing_v2.ComputeRoutesRequest(origin=origin, destination=destination)
-
-    fieldMask = "formattedAddress,displayName"
 
     response = client.compute_routes(
         request=request,
@@ -100,17 +99,21 @@ def calculate_route(origin_address, destination_address):
         ],
     )
     encoded_polyline = response.routes[0].polyline.encoded_polyline
-    print(type(response.routes[0].polyline))
     return encoded_polyline
 
+"""Retrieves addresses Place ID and coordinates for origin and destination and calls Google API to return route information."""
 
-def price_calculation(request):
+def route_calculation(request):
     origin_id = request.POST.get("pickup_address")
     destination_id = request.POST.get("delivery_address")
 
-    origin_address = str(Address.objects.get(id=origin_id))
-    destination_address = str(Address.objects.get(id=destination_id))
+    origin_address = Address.objects.get(id=origin_id)
+    destination_address = Address.objects.get(id=destination_id)
 
-    response = calculate_route(origin_address, destination_address)
+    origin_address_coordinates = (origin_address.latitude, origin_address.longitude)
+    destination_address_coordinates = (destination_address.latitude, destination_address.longitude)
+    response = calculate_route(origin_address.place_id, destination_address.place_id)
 
-    return response
+    route_info = [response, origin_address_coordinates, destination_address_coordinates]
+
+    return route_info

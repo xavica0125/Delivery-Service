@@ -163,9 +163,13 @@ def create_delivery(request):
 
 @login_required(login_url="/")
 def calculate_price(request):
-    response = price_calculation(request)
-
-    return render(request, "calculate_price.html", {"polyline": response})
+    response = route_calculation(request)   
+    context = {
+        "polyline": response[0],
+        "origin_address_coordinates": response[1],
+        "destination_address_coordinates": response[2],
+    }
+    return render(request, "calculate_price.html", context)
 
 
 @login_required(login_url="/")
