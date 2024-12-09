@@ -36,6 +36,9 @@ class Address(models.Model):
     associated_customer = models.ForeignKey(
         "Customer", on_delete=models.CASCADE, related_name="addresses"
     )
+    latitude = models.CharField(max_length=50)
+    longitude = models.CharField(max_length=50)
+    place_id = models.CharField(max_length=50)
 
     def __str__(self):
         return f"{self.street_address} {self.sub_premise}, {self.city}, {self.state} {self.zip_code} ({self.location_name})"
