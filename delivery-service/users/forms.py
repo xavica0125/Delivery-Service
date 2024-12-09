@@ -158,6 +158,12 @@ class CustomerSignUpForm(forms.ModelForm):  # TODO change name of class
             address, city, zip_code
         )
 
+        geocode_result = self.validation_response.result.geocode
+
+        cleaned_data["place_id"] = geocode_result.place_id
+        cleaned_data["latitude"] = geocode_result.location.latitude
+        cleaned_data["longitude"] = geocode_result.location.longitude
+
         if self.validation_action == "FIX":
             raise forms.ValidationError(
                 "The provided address is invalid. Please check and try again."
@@ -166,6 +172,16 @@ class CustomerSignUpForm(forms.ModelForm):  # TODO change name of class
             raise forms.ValidationError("Confirm your address.")
 
         return cleaned_data
+
+    def save(self, commit=True):
+        instance = super().save(commit=False)
+        instance.place_id = self.cleaned_data.get("place_id")
+        instance.latitude = self.cleaned_data.get("latitude")
+        instance.longitude = self.cleaned_data.get("longitude")
+
+        if commit:
+            instance.save()
+        return instance
 
     def get_formatted_address(self):
         return self.validation_response.result.address.formatted_address
