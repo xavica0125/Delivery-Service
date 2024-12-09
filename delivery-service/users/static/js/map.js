@@ -4,23 +4,17 @@ let polyline, encodedPolyline;
 
 function initMap() {
   map = new google.maps.Map(document.getElementById("map"), {
-    center: { lat: -34.397, lng: 150.644 },
-    zoom: 8,
+    center: { lat: 30.302200758628747, lng: -97.72710466785287 },
+    zoom: 7,
     mapId: '4522a0646380064b'
   });
-
-
 }
 
 window.initMap = initMap;
 
-function showPolyline(encodedPolyline) {
-
-  decodedPath = google.maps.geometry.encoding.decodePath(encodedPolyline)
-
-
-
+function showPolyline(encodedPolyline, originAddressLat, originAddressLon, destinationAddressLat, destinationAddressLon) {
   // Decode the encoded polyline into LatLng coordinates
+  decodedPath = google.maps.geometry.encoding.decodePath(encodedPolyline)
 
   // Create and add the polyline to the map
   const polyline = new google.maps.Polyline({
@@ -37,39 +31,40 @@ function showPolyline(encodedPolyline) {
   decodedPath.forEach((point) => bounds.extend(point));
   map.fitBounds(bounds);
 
-  const pin = new google.maps.marker.PinElement({
-    scale: 1.5,
-});
+  const originPin = new google.maps.marker.PinElement({
+    glyph: "P",
+    glyphColor: "black",
+  });
 
-  const advancedMarker = new google.maps.marker.AdvancedMarkerElement({
+  const destinationPin = new google.maps.marker.PinElement({
+    glyph: "D",
+    glyphColor: "black",
+  });
+
+  const originAddressMarker = new google.maps.marker.AdvancedMarkerElement({
     map: map,
-    position: { lat: 30.3106128, lng: -97.3500027 },
-    content: pin.element
+    position: { lat: parseFloat(originAddressLat), lng: parseFloat(originAddressLon) },
+    content: originPin.element
   });
 
-  
-  /*const content = advancedMarker.content;
-
-  content.style.opacity = "0";
-  content.addEventListener("animationend", (event) => {
-    content.classList.remove("drop");
-    content.style.opacity = "1";
+  const destinationAddressMarker = new google.maps.marker.AdvancedMarkerElement({
+    map: map,
+    position: { lat: parseFloat(destinationAddressLat), lng: parseFloat(destinationAddressLon) },
+    content: destinationPin.element  
   });
 
-  const time = 2 + Math.random(); // 2s delay for easy to see the animation
-
-  content.style.setProperty("--delay-time", time + "s");
-  */
 }
 
 document.addEventListener("htmx:afterSwap", (event) => {
-  console.log("htmx:afterSwap event triggered");
-  console.log("hello");
   if (event.detail.target.id === "price-div") {
       const polyline = document.getElementById("polyline-data").textContent;
-      console.log(polyline);
+      const originAddressLat = document.getElementById("origin-address-latitude").textContent;
+      const originAddressLon = document.getElementById("origin-address-longitude").textContent;
+      const destinationAddressLat = document.getElementById("destination-address-latitude").textContent;
+      const destinationAddressLon = document.getElementById("destination-address-longitude").textContent;
+      
       if (polyline) {
-          showPolyline(polyline.trim());
+          showPolyline(polyline.trim(), originAddressLat, originAddressLon, destinationAddressLat, destinationAddressLon);
       }
   }
 });
