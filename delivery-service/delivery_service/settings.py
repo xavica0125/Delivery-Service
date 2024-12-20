@@ -20,6 +20,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv("/workspaces/Delivery-Service/.env")
 MAPS_KEY = os.getenv("MAPS_KEY")
 GOOGLE_SERVICE_ACCOUNT_KEY = os.getenv("GOOGLE_SERVICE_ACCOUNT_KEY")
+EIA_KEY = os.getenv("EIA_KEY")
+EMAIL_USER = os.getenv("EMAIL_USER")
+EMAIL_PASSWORD = os.getenv("EMAIL_PASSWORD")
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
@@ -142,15 +145,6 @@ STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 LOGOUT_REDIRECT_URL = "/"
-
-# SMTP Configuration
-"""EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST = "smtp.gmail.com"
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True"""
-EMAIL_HOST_USER = "xaviercabrera331@gmail.com"
-EMAIL_HOST_PASSWORD = "iixq klue sgdi gvai"
-
 
 # CELERY SETTINGS
 CELERY_BROKER_URL = "redis://127.0.0.1:6379/0"

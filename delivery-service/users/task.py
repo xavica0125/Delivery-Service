@@ -4,7 +4,6 @@ import smtplib
 import smtplib, ssl
 from celery import shared_task
 from django.conf import settings
-from celery import shared_task
 from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
 
@@ -24,7 +23,7 @@ def send_password_reset_email(user_id, domain, protocol, token):
 
     # Set the email subject, sender, and receiver
     msg["Subject"] = "Password Reset Link"
-    msg["From"] = settings.EMAIL_HOST_USER
+    msg["From"] = settings.EMAIL_USER
     msg["To"] = user.email
 
     reset_link = f"{protocol}://{domain}/reset/{urlsafe_base64_encode(force_bytes(user.pk))}/{token}/"
@@ -37,7 +36,7 @@ def send_password_reset_email(user_id, domain, protocol, token):
     context = ssl.create_default_context()
     with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
         # Log in to the email account
-        server.login(settings.EMAIL_HOST_USER, settings.EMAIL_HOST_PASSWORD)
+        server.login(settings.EMAIL_USER, settings.EMAIL_PASSWORD)
 
         # Send the email
-        server.sendmail(settings.EMAIL_HOST_USER, user.email, msg.as_string())
+        server.sendmail(settings.EMAIL_USER, user.email, msg.as_string())
