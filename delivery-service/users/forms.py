@@ -20,7 +20,7 @@ from crispy_forms.layout import (
     Field,
 )
 from crispy_bootstrap5.bootstrap5 import FloatingField
-from delivery_service.settings import EMAIL_HOST_USER
+from delivery_service.settings import EMAIL_USER
 from django.contrib.sites.shortcuts import get_current_site
 from django.contrib.auth.tokens import default_token_generator
 from .task import send_password_reset_email
