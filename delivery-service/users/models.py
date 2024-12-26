@@ -142,3 +142,9 @@ class Contact(models.Model):
 
     def __str__(self):
         return f"{self.contact_name} {self.phone_number}"
+
+
+class FuelPrice(models.Model):
+    date_created = models.DateField(auto_now_add=True)
+    gas_price = MoneyField(max_digits=2, decimal_places=2, default_currency="USD")
+    diesel_price = MoneyField(max_digits=2, decimal_places=2, default_currency="USD")
