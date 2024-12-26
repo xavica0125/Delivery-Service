@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     "django_celery_results",
     "phonenumber_field",
     "djmoney",
+    "django_celery_beat",
 ]
 
 MIDDLEWARE = [
