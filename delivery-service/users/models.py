@@ -146,5 +146,5 @@ class Contact(models.Model):
 
 class FuelPrice(models.Model):
     date_created = models.DateField(auto_now_add=True)
-    gas_price = MoneyField(max_digits=2, decimal_places=2, default_currency="USD")
-    diesel_price = MoneyField(max_digits=2, decimal_places=2, default_currency="USD")
+    gas_price = models.DecimalField(max_digits=19, decimal_places=4)
+    diesel_price = models.DecimalField(max_digits=19, decimal_places=4)
