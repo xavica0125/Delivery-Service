@@ -11,6 +11,7 @@ from django.utils import timezone
 from .models import FuelPrice
 from django_celery_beat.models import PeriodicTask, CrontabSchedule
 from decimal import Decimal
+import pytz
 
 
 @shared_task
@@ -49,7 +50,9 @@ def send_password_reset_email(user_id, domain, protocol, token):
 
 @shared_task
 def get_fuel_prices():
-    most_recent_price_date = str(timezone.localtime(timezone.now()))[:10]
+    most_recent_price_date = str(
+        timezone.localdate(timezone.now(), pytz.timezone("US/Central"))
+    )
     r = requests.get(
         f"https://api.eia.gov/v2/petroleum/pri/gnd/data?api_key={settings.EIA_KEY}&frequency=weekly&data[0]=value&facets[duoarea][]=NUS&facets[duoarea][]=STX&facets[product][]=EPD2DXL0&facets[product][]=EPMPU&facets[series][]=EMD_EPD2DXL0_PTE_NUS_DPG&facets[series][]=EMM_EPMPU_PTE_STX_DPG&facets[process][]=PTE&start={most_recent_price_date}&sort[0][column]=period&sort[0][direction]=desc&offset=0&length=5000"
     )
