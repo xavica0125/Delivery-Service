@@ -329,6 +329,20 @@ class CreateOrderForm(forms.ModelForm):
     weight = forms.IntegerField(label="Weight (in pounds)")
     content = forms.Textarea()
 
+    YES_NO_CHOICES = [
+        ("yes", "Yes"),
+        ("no", "No"),
+    ]
+    shipment_length = forms.ChoiceField(
+        choices=YES_NO_CHOICES,
+        required=True,
+        widget=forms.RadioSelect(attrs={"class": "col form-check form-switch"}),
+        label="",
+    )
+    enclosed_option = forms.ChoiceField(
+        choices=YES_NO_CHOICES, required=True, widget=forms.RadioSelect, label=""
+    )
+
     class Meta:
         model = Order
         fields = (
@@ -400,6 +414,17 @@ class CreateOrderForm(forms.ModelForm):
                     Div(
                         FloatingField("content"),
                     ),
+                    css_class="row mb-3",
+                ),
+                Div(
+                    Div(HTML("<p>Does your shipment exceed 10 feet in length?</p>")),
+                    Div("shipment_length", css_class="form-check form-switch"),
+                    Div(
+                        HTML(
+                            "<p>Do you required your shipment to be covered/enclosed?</p>"
+                        )
+                    ),
+                    Div("enclosed_option", css_class="form-check form-switch"),
                     css_class="row mb-3",
                 ),
                 ButtonHolder(
