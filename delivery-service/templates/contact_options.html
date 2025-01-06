@@ -1,9 +1,10 @@
 {% block content %}
 
-<select class="form-select" id="contact-select" aria-label="Contact select">
+<select class="form-select" id="contact-select" name="contact"
+    aria-label="Contact select">
     <option selected>Select a contact</option>
     {% for contact in context %}
-    <option value="{{contact}}">{{ contact }}</option>
+    <option value="{{contact.id}}">{{ contact }}</option>
     {% endfor %}
 </select>
 <label for="contact-select">Contact</label>
