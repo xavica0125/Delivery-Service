@@ -79,7 +79,9 @@ def populate_address_context(address_components, context={}):
 
     return context
 
+
 """Calls Google Maps API to get distance and encoded polyline."""
+
 
 def calculate_route(origin_address, destination_address):
     client = routing_v2.RoutesClient()
@@ -99,9 +101,12 @@ def calculate_route(origin_address, destination_address):
         ],
     )
     encoded_polyline = response.routes[0].polyline.encoded_polyline
-    return encoded_polyline
+    distance = response.routes[0].localized_values.distance
+    return (encoded_polyline, distance)
+
 
 """Retrieves addresses Place ID and coordinates for origin and destination and calls Google API to return route information."""
+
 
 def route_calculation(request):
     origin_id = request.POST.get("pickup_address")
@@ -111,9 +116,19 @@ def route_calculation(request):
     destination_address = Address.objects.get(id=destination_id)
 
     origin_address_coordinates = (origin_address.latitude, origin_address.longitude)
-    destination_address_coordinates = (destination_address.latitude, destination_address.longitude)
-    response = calculate_route(origin_address.place_id, destination_address.place_id)
+    destination_address_coordinates = (
+        destination_address.latitude,
+        destination_address.longitude,
+    )
+    encoded_polyline, distance = calculate_route(
+        origin_address.place_id, destination_address.place_id
+    )
 
-    route_info = [response, origin_address_coordinates, destination_address_coordinates]
+    route_info = [
+        encoded_polyline,
+        distance,
+        origin_address_coordinates,
+        destination_address_coordinates,
+    ]
 
     return route_info
