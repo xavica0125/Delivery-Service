@@ -23,6 +23,10 @@ GOOGLE_SERVICE_ACCOUNT_KEY = os.getenv("GOOGLE_SERVICE_ACCOUNT_KEY")
 EIA_KEY = os.getenv("EIA_KEY")
 EMAIL_USER = os.getenv("EMAIL_USER")
 EMAIL_PASSWORD = os.getenv("EMAIL_PASSWORD")
+WEAR_AND_TEAR_PICKUP = os.getenv("WEAR_AND_TEAR_PICKUP")
+AVG_MPG_PICKUP = os.getenv("AVG_MPG_PICKUP")
+WEAR_AND_TEAR_HEAVY_DUTY = os.getenv("WEAR_AND_TEAR_HEAVY_DUTY")
+AVG_MPG_HEAVY_DUTY = os.getenv("AVG_MPG_HEAVY_DUTY")
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
