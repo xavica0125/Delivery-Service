@@ -339,9 +339,6 @@ class CreateOrderForm(forms.ModelForm):
         widget=forms.RadioSelect(attrs={"class": "col form-check form-switch"}),
         label="",
     )
-    enclosed_option = forms.ChoiceField(
-        choices=YES_NO_CHOICES, required=True, widget=forms.RadioSelect, label=""
-    )
 
     class Meta:
         model = Order
