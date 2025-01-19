@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container-fluid">
+    <div class="shadow p-4 mb-5 bg-body rounded">
+        <h1> Add Contact</h1>
+        {% load crispy_forms_tags %}
+        {% csrf_token %}
+        {% crispy form %}
+    </div>
+</div>
+
+{% endblock %}
