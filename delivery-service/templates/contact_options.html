@@ -3,7 +3,7 @@
 <select class="form-select" id="contact-select" name="contact"
     aria-label="Contact select">
     <option selected>Select a contact</option>
-    {% for contact in context %}
+    {% for contact in contact_list %}
     <option value="{{contact.id}}">{{ contact }}</option>
     {% endfor %}
 </select>
@@ -13,4 +13,7 @@
     onclick="location.href = '/add_contact?delivery_address=' + this.value;">Add
     new
     contact </button>
+
+<div id="delivery_address_placeid1" style="display: none;">{{ delivery_address_placeid1 }}</div>
+<div id="pickup_address_placeid1" style="display: none;">{{ pickup_address_placeid1 }}</div>
 {% endblock %}

@@ -39,4 +39,10 @@ urlpatterns = [
             template_name="../templates/password_reset_confirm.html",
         ),
         name="password_reset_confirm",
-    ),]
+    ),
+    path(
+        "pickup_address_change/",
+        views.pickup_address_change,
+        name="pickup_address_change",
+    ),
+]

@@ -1,70 +1,90 @@
+// Global variables for map, directions, and polyline
 let map;
-let decodedPath;
-let polyline, encodedPolyline;
+let directionsService;
+let directionsRenderer;
 
+// Initialize the map
 function initMap() {
+  // Create the map instance
   map = new google.maps.Map(document.getElementById("map"), {
     center: { lat: 30.302200758628747, lng: -97.72710466785287 },
     zoom: 7,
-    mapId: '4522a0646380064b'
+    mapId: "4522a0646380064b", 
+  });
+
+  // Initialize Directions Service and Renderer
+  directionsService = new google.maps.DirectionsService();
+  directionsRenderer = new google.maps.DirectionsRenderer({
+    map: map,
   });
 }
 
-window.initMap = initMap;
-
-function showPolyline(encodedPolyline, originAddressLat, originAddressLon, destinationAddressLat, destinationAddressLon) {
-  // Decode the encoded polyline into LatLng coordinates
-  decodedPath = google.maps.geometry.encoding.decodePath(encodedPolyline)
-
-  // Create and add the polyline to the map
-  const polyline = new google.maps.Polyline({
-    path: decodedPath,
-    strokeColor: "#0066CC",
-    strokeOpacity: 1.0,
-    strokeWeight: 4,
-  });
-
-  polyline.setMap(map); // Set the polyline on the map
-
-  // Fit the map to the polyline bounds
-  const bounds = new google.maps.LatLngBounds();
-  decodedPath.forEach((point) => bounds.extend(point));
-  map.fitBounds(bounds);
-
-  const originPin = new google.maps.marker.PinElement({
-    glyph: "P",
-    glyphColor: "black",
-  });
-
-  const destinationPin = new google.maps.marker.PinElement({
-    glyph: "D",
-    glyphColor: "black",
-  });
-
-  const originAddressMarker = new google.maps.marker.AdvancedMarkerElement({
-    map: map,
-    position: { lat: parseFloat(originAddressLat), lng: parseFloat(originAddressLon) },
-    content: originPin.element
-  });
-
-  const destinationAddressMarker = new google.maps.marker.AdvancedMarkerElement({
-    map: map,
-    position: { lat: parseFloat(destinationAddressLat), lng: parseFloat(destinationAddressLon) },
-    content: destinationPin.element  
-  });
-
-}
-
-document.addEventListener("htmx:afterSwap", (event) => {
-  if (event.detail.target.id === "order-information") {
-      const polyline = document.getElementById("polyline-data").textContent;
-      const originAddressLat = document.getElementById("origin-address-latitude").textContent;
-      const originAddressLon = document.getElementById("origin-address-longitude").textContent;
-      const destinationAddressLat = document.getElementById("destination-address-latitude").textContent;
-      const destinationAddressLon = document.getElementById("destination-address-longitude").textContent;
-     
-      if (polyline) {
-          showPolyline(polyline.trim(), originAddressLat, originAddressLon, destinationAddressLat, destinationAddressLon);
-      }
+// Display the route on the map
+function showRoute(originPlaceId, destinationPlaceId) {
+  if (!directionsService || !directionsRenderer) {
+    console.error("Directions service or renderer not initialized");
+    return;
   }
-});
+
+  // Request route directions
+  directionsService
+    .route({
+      origin: { placeId: originPlaceId },
+      destination: { placeId: destinationPlaceId },
+      travelMode: google.maps.TravelMode.DRIVING,
+      provideRouteAlternatives: true,
+    })
+    .then((response) => {
+      directionsRenderer.setDirections(response); 
+    })
+    .catch((error) => {
+      console.error("Error fetching route directions:", error);
+    });
+}
+
+// Handle HTMX afterRequest event
+function handleHTMXAfterRequest(event) {
+  let originPlaceId;
+  let destinationPlaceId;
+  
+  if (event.detail.target.id === "contact-options") {
+    // Extract Place IDs
+    originPlaceId = document
+      .getElementById("pickup_address_placeid1")
+      .textContent.trim();
+    destinationPlaceId = document
+      .getElementById("delivery_address_placeid1")
+      .textContent.trim();
+  }
+  else if (event.detail.target.id === "address_field_id")
+  {
+    originPlaceId = document
+      .getElementById("pickup_address_placeid2")
+      .textContent.trim();
+    destinationPlaceId = document
+      .getElementById("delivery_address_placeid2")
+      .textContent.trim();
+  }
+    console.log(originPlaceId)
+    console.log(destinationPlaceId)
+    // Validate Place IDs
+    if (originPlaceId && destinationPlaceId) {
+      showRoute(originPlaceId, destinationPlaceId);
+    } else {
+      console.error("Invalid Place IDs provided");
+    }
+  
+}
+
+// Register event listeners
+function setupEventListeners() {
+  document.addEventListener("htmx:afterSettle", handleHTMXAfterRequest);
+}
+
+// Initialize everything
+function initialize() {
+  initMap(); 
+  setupEventListeners();
+}
+
+window.initMap = initialize;

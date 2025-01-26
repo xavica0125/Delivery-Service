@@ -370,7 +370,15 @@ class CreateOrderForm(forms.ModelForm):
             Div(
                 Div(
                     Div(
-                        FloatingField("pickup_address"),
+                        FloatingField(
+                            "pickup_address",
+                            id="pickup_address",
+                            **{
+                                "hx-get": reverse_lazy("pickup_address_change"),
+                                "hx-include": "#delivery_address",
+                                "hx-target": "#address_field_id",
+                            },
+                        ),
                         css_class="col",
                     ),
                     css_class="row mb-3",
@@ -379,9 +387,11 @@ class CreateOrderForm(forms.ModelForm):
                     Div(
                         FloatingField(
                             "delivery_address",
+                            id="delivery_address",
                             **{
                                 "hx-get": reverse_lazy("contact_options"),
                                 "hx-target": "#contact-options",
+                                "hx-include": "#pickup_address",
                             },
                         ),
                         Button(
@@ -394,6 +404,7 @@ class CreateOrderForm(forms.ModelForm):
                     ),
                     css_class="row mb-3",
                 ),
+                Div(css_id="address_field_id"),
                 Div(
                     Div(
                         css_id="contact-options",
