@@ -363,7 +363,9 @@ class CreateOrderForm(forms.ModelForm):
         self.fields["pickup_address"].queryset = all_user_addresses
         self.fields["pickup_address"].initial = user.default_pickup_address
 
-        self.fields["delivery_address"].queryset = all_user_addresses
+        self.fields["delivery_address"].queryset = all_user_addresses.exclude(
+            id=user.default_pickup_address_id
+        )
         self.helper = FormHelper(self)
         self.helper.form_action = reverse_lazy("create_delivery")
         self.helper.layout = Layout(
