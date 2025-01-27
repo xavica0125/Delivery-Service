@@ -56,7 +56,7 @@ function handleHTMXAfterRequest(event) {
       .getElementById("delivery_address_placeid1")
       .textContent.trim();
   }
-  else if (event.detail.target.id === "address_field_id")
+  else if (event.detail.target.id === "delivery_address")
   {
     originPlaceId = document
       .getElementById("pickup_address_placeid2")
@@ -65,14 +65,13 @@ function handleHTMXAfterRequest(event) {
       .getElementById("delivery_address_placeid2")
       .textContent.trim();
   }
-    console.log(originPlaceId)
-    console.log(destinationPlaceId)
+    
     // Validate Place IDs
-    if (originPlaceId && destinationPlaceId) {
-      showRoute(originPlaceId, destinationPlaceId);
-    } else {
-      console.error("Invalid Place IDs provided");
-    }
+  if (originPlaceId && destinationPlaceId) {
+    showRoute(originPlaceId, destinationPlaceId);
+  } else {
+    console.error("Invalid Place IDs provided");
+  }
   
 }
 

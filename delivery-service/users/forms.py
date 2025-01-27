@@ -378,7 +378,7 @@ class CreateOrderForm(forms.ModelForm):
                             **{
                                 "hx-get": reverse_lazy("pickup_address_change"),
                                 "hx-include": "#delivery_address",
-                                "hx-target": "#address_field_id",
+                                "hx-target": "#delivery_address",
                             },
                         ),
                         css_class="col",
@@ -406,7 +406,6 @@ class CreateOrderForm(forms.ModelForm):
                     ),
                     css_class="row mb-3",
                 ),
-                Div(css_id="address_field_id"),
                 Div(
                     Div(
                         css_id="contact-options",
