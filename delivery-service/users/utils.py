@@ -1,6 +1,5 @@
 from django.conf import settings
 from google.maps import addressvalidation_v1, routing_v2
-import googlemaps
 from google.type import postal_address_pb2
 from google.oauth2 import service_account
 from .models import Address
