@@ -309,16 +309,33 @@ class Password_Reset_Confirm(SetPasswordForm):
         )
 
 
+# Custom select widget that adds Address object place_id attribute to select element in template
+class CustomSelectWithAttributes(forms.Select):
+    def create_option(
+        self, name, value, label, selected, index, subindex=None, attrs=None
+    ):
+        option = super().create_option(
+            name, value, label, selected, index, subindex, attrs
+        )
+
+        if value:
+            option["attrs"]["data-place-id"] = value.instance.place_id
+        return option
+
+
 """Order model form """
 
 
 class CreateOrderForm(forms.ModelForm):
     pickup_address = forms.ModelChoiceField(
-        queryset=Address.objects.none(), empty_label=None
+        queryset=Address.objects.none(),
+        empty_label=None,
+        widget=CustomSelectWithAttributes,
     )
     delivery_address = forms.ModelChoiceField(
         queryset=Address.objects.none(),
         empty_label="Select a destination",
+        widget=CustomSelectWithAttributes,
     )
     time_window = forms.ChoiceField(
         choices=Order.TimeWindow,
@@ -363,48 +380,58 @@ class CreateOrderForm(forms.ModelForm):
         self.fields["pickup_address"].queryset = all_user_addresses
         self.fields["pickup_address"].initial = user.default_pickup_address
 
-        self.fields["delivery_address"].queryset = all_user_addresses.exclude(
-            id=user.default_pickup_address_id
-        )
+        self.fields["delivery_address"].queryset = all_user_addresses
+
         self.helper = FormHelper(self)
         self.helper.form_action = reverse_lazy("create_delivery")
         self.helper.layout = Layout(
             Div(
                 Div(
                     Div(
-                        FloatingField(
-                            "pickup_address",
-                            id="pickup_address",
-                            **{
-                                "hx-get": reverse_lazy("pickup_address_change"),
-                                "hx-include": "#delivery_address",
-                                "hx-target": "#delivery_address",
-                            },
+                        Div(
+                            FloatingField(
+                                "pickup_address",
+                                id="pickup_address",
+                            ),
+                            css_class="col",
                         ),
-                        css_class="col",
+                        css_class="row mb-3",
                     ),
-                    css_class="row mb-3",
-                ),
-                Div(
                     Div(
-                        FloatingField(
-                            "delivery_address",
-                            id="delivery_address",
-                            **{
-                                "hx-get": reverse_lazy("contact_options"),
-                                "hx-target": "#contact-options",
-                                "hx-include": "#pickup_address",
-                            },
+                        Div(
+                            HTML(
+                                '<button type="button" class="btn btn-primary" id="swap-button">'
+                                '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"'
+                                'class="bi bi-arrow-down-up" viewBox="0 0 16 16">'
+                                '<path fill-rule="evenodd" d="M11.5 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L11 2.707V14.5a.5.5 0 0 0 .5.5m-7-14a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L4 13.293V1.5a.5.5 0 0 1 .5-.5"/>'
+                                "</svg>"
+                                "</button>"
+                            ),
+                            css_class="d-flex justify-content-center align-items-center",
                         ),
-                        Button(
-                            "add_new_address",
-                            "Add new address",
-                            css_class="btn btn-primary",
-                            onclick=f"location.href='{reverse_lazy('customer_sign_up')}'",
-                        ),
-                        css_class="col",
+                        css_class="row mb-3",
                     ),
-                    css_class="row mb-3",
+                    Div(
+                        Div(
+                            FloatingField(
+                                "delivery_address",
+                                id="delivery_address",
+                                **{
+                                    "hx-get": reverse_lazy("contact_options"),
+                                    "hx-target": "#contact-options",
+                                },
+                            ),
+                            Button(
+                                "add_new_address",
+                                "Add new address",
+                                css_class="btn btn-primary",
+                                onclick=f"location.href='{reverse_lazy('customer_sign_up')}'",
+                            ),
+                            css_class="col",
+                        ),
+                        css_class="row mb-3",
+                    ),
+                    css_class="address_fields",
                 ),
                 Div(
                     Div(

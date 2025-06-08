@@ -173,7 +173,12 @@ def create_delivery(request):
         return render(
             request,
             "create_delivery.html",
-            {"form": form},
+            {
+                "form": form,
+                "placeIDs": list(
+                    Customer.objects.get(user_id=request.user.id).addresses.values()
+                ),
+            },
         )
 
 
@@ -207,16 +212,10 @@ def add_contact(request):
 @login_required(login_url="/")
 def contact_options(request):
     delivery_address = request.GET.get("delivery_address")
-    pickup_address_placeid = Address.objects.get(
-        id=request.GET.get("pickup_address")
-    ).place_id
-    delivery_address_placeid = Address.objects.get(id=delivery_address).place_id
     contact_list = Contact.objects.filter(address=delivery_address)
     context = {
         "contact_list": contact_list,
         "delivery_address": delivery_address,
-        "pickup_address_placeid1": pickup_address_placeid,
-        "delivery_address_placeid1": delivery_address_placeid,
     }
     return render(request, "contact_options.html", context)
 

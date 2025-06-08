@@ -43,29 +43,21 @@ function showRoute(originPlaceId, destinationPlaceId) {
 }
 
 // Handle HTMX afterRequest event
-function handleHTMXAfterRequest(event) {
+function handleMapRouting() {
+
+  console.log("Map routing called");
+
   let originPlaceId;
   let destinationPlaceId;
   
-  if (event.detail.target.id === "contact-options") {
-    // Extract Place IDs
-    originPlaceId = document
-      .getElementById("pickup_address_placeid1")
-      .textContent.trim();
-    destinationPlaceId = document
-      .getElementById("delivery_address_placeid1")
-      .textContent.trim();
-  }
-  else if (event.detail.target.id === "delivery_address")
-  {
-    originPlaceId = document
-      .getElementById("pickup_address_placeid2")
-      .textContent.trim();
-    destinationPlaceId = document
-      .getElementById("delivery_address_placeid2")
-      .textContent.trim();
-  }
-    
+  let placeIDs = JSON.parse(document.getElementById("place-ids-json").textContent);
+
+  console.log(placeIDs);
+
+  originPlaceId = document.getElementById("pickup_address_placeid1").textContent.trim();
+  destinationPlaceId = document.getElementById("delivery_address_placeid1").textContent.trim();
+
+
     // Validate Place IDs
   if (originPlaceId && destinationPlaceId) {
     showRoute(originPlaceId, destinationPlaceId);
@@ -77,13 +69,47 @@ function handleHTMXAfterRequest(event) {
 
 // Register event listeners
 function setupEventListeners() {
-  document.addEventListener("htmx:afterSettle", handleHTMXAfterRequest);
+  pickup_address = document.getElementById("pickup_address");
+  delivery_address = document.getElementById("delivery_address");
+
+  pickup_address.addEventListener("change", handleMapRouting);
+  delivery_address.addEventListener("change", handleMapRouting);
+  
+  const swap_button = document.getElementById("swap-button");
+
+  swap_button.addEventListener("click", swapValues);
+  
+  console.log("event set up");
+}
+
+function swapValues()
+{
+    let pickup_address = document.getElementById("pickup_address").value; //DO NOT FORGET, I moved pickup and delivery address inside swapValues function to update it everytime the values are changed
+    let delivery_address = document.getElementById("delivery_address").value;
+
+    console.log(pickup_address);
+    console.log(delivery_address);
+
+    let temp = pickup_address;
+
+    pickup_address = delivery_address;
+    delivery_address = temp;
+
+    document.getElementById("pickup_address").value = pickup_address;
+    document.getElementById("delivery_address").value = delivery_address;
+
+    htmx.ajax('GET', "/contact_options", {target: "#contact-options", values: {
+      "pickup_address" : pickup_address, "delivery_address" : delivery_address
+    }});
+
+    handleMapRouting();
 }
 
 // Initialize everything
 function initialize() {
   initMap(); 
   setupEventListeners();
+
 }
 
 window.initMap = initialize;
