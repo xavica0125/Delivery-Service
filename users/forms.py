@@ -319,7 +319,7 @@ class CustomSelectWithAttributes(forms.Select):
         )
 
         if value:
-            option["attrs"]["data-place-id"] = value.instance.place_id
+            option["attrs"]["data-placeid"] = value.instance.place_id
         return option
 
 
