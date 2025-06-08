@@ -44,19 +44,8 @@ function showRoute(originPlaceId, destinationPlaceId) {
 
 // Handle HTMX afterRequest event
 function handleMapRouting() {
-
-  console.log("Map routing called");
-
-  let originPlaceId;
-  let destinationPlaceId;
-  
-  let placeIDs = JSON.parse(document.getElementById("place-ids-json").textContent);
-
-  console.log(placeIDs);
-
-  originPlaceId = document.getElementById("pickup_address_placeid1").textContent.trim();
-  destinationPlaceId = document.getElementById("delivery_address_placeid1").textContent.trim();
-
+  let originPlaceId = document.getElementById("pickup_address").selectedOptions[0].dataset.placeid;
+  let destinationPlaceId = document.getElementById("delivery_address").selectedOptions[0].dataset.placeid;
 
     // Validate Place IDs
   if (originPlaceId && destinationPlaceId) {
@@ -79,16 +68,12 @@ function setupEventListeners() {
 
   swap_button.addEventListener("click", swapValues);
   
-  console.log("event set up");
 }
 
 function swapValues()
 {
     let pickup_address = document.getElementById("pickup_address").value; //DO NOT FORGET, I moved pickup and delivery address inside swapValues function to update it everytime the values are changed
     let delivery_address = document.getElementById("delivery_address").value;
-
-    console.log(pickup_address);
-    console.log(delivery_address);
 
     let temp = pickup_address;
 
@@ -99,7 +84,7 @@ function swapValues()
     document.getElementById("delivery_address").value = delivery_address;
 
     htmx.ajax('GET', "/contact_options", {target: "#contact-options", values: {
-      "pickup_address" : pickup_address, "delivery_address" : delivery_address
+      "delivery_address" : delivery_address
     }});
 
     handleMapRouting();
@@ -109,7 +94,6 @@ function swapValues()
 function initialize() {
   initMap(); 
   setupEventListeners();
-
 }
 
 window.initMap = initialize;
