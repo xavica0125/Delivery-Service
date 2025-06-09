@@ -218,27 +218,3 @@ def contact_options(request):
         "delivery_address": delivery_address,
     }
     return render(request, "contact_options.html", context)
-
-
-@login_required(login_url="/")
-def pickup_address_change(request):
-    pickup_address = request.GET.get("pickup_address")
-    delivery_address = request.GET.get("delivery_address")
-
-    pickup_address_placeid = Address.objects.get(id=pickup_address).place_id
-    delivery_address_placeid = Address.objects.get(id=delivery_address).place_id
-
-    user = request.user.customer
-
-    addresses = Address.objects.filter(associated_customer_id=user).exclude(
-        id=pickup_address
-    )
-
-    context = {
-        "pickup_address_placeid2": pickup_address_placeid,
-        "delivery_address_placeid2": delivery_address_placeid,
-        "new_addresses": addresses,
-        "selected_delivery_address": delivery_address,
-    }
-
-    return render(request, "pickup_address_change.html", context)
