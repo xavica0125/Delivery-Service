@@ -20,12 +20,17 @@ function initMap() {
 }
 
 // Display the route on the map
-function showRoute(originPlaceId, destinationPlaceId) {
+ async function showRoute(originPlaceId, destinationPlaceId) {
   if (!directionsService || !directionsRenderer) {
     console.error("Directions service or renderer not initialized");
     return;
   }
 
+  const [originCoords, destinationCoords] = await Promise.all([getCoordinates(originPlaceId), getCoordinates(destinationPlaceId)]);
+
+  console.log(originCoords.lng());
+  console.log(destinationCoords.lng());
+  
   // Request route directions
   directionsService
     .route({
@@ -40,6 +45,18 @@ function showRoute(originPlaceId, destinationPlaceId) {
     .catch((error) => {
       console.error("Error fetching route directions:", error);
     });
+}
+
+// Utilize Google Maps Geocoding to get coordinates to origin and destination addresses
+
+async function getCoordinates(placeId) {
+  const geocoder = new google.maps.Geocoder();
+  
+  const geocodeResponse = await geocoder.geocode({
+    placeId : placeId
+  });
+
+  return geocodeResponse.results[0]["geometry"]["location"];
 }
 
 // Handle HTMX afterRequest event
