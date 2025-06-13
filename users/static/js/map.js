@@ -16,6 +16,7 @@ function initMap() {
   directionsService = new google.maps.DirectionsService();
   directionsRenderer = new google.maps.DirectionsRenderer({
     map: map,
+    suppressMarkers : true
   });
 }
 
@@ -28,9 +29,6 @@ function initMap() {
 
   const [originCoords, destinationCoords] = await Promise.all([getCoordinates(originPlaceId), getCoordinates(destinationPlaceId)]);
 
-  console.log(originCoords.lng());
-  console.log(destinationCoords.lng());
-  
   // Request route directions
   directionsService
     .route({
@@ -40,12 +38,35 @@ function initMap() {
       provideRouteAlternatives: true,
     })
     .then((response) => {
-      directionsRenderer.setDirections(response); 
+      createMarker(originCoords, "green");
+      createMarker(destinationCoords, "red");
+      directionsRenderer.setDirections(response);
+      directionsRenderer.setRouteIndex(1);
+      
     })
     .catch((error) => {
       console.error("Error fetching route directions:", error);
     });
 }
+
+// Make custom marker elements to display alongside route
+
+function createMarker(coords, color) {
+  const pin = new google.maps.marker.PinElement({
+    scale : 1,
+    background : color,
+    borderColor : color,
+    glyphColor: "white",
+  });
+
+  const marker = new google.maps.marker.AdvancedMarkerElement({
+    map : map,
+    position : coords,
+    content : pin.element
+  });
+
+}
+
 
 // Utilize Google Maps Geocoding to get coordinates to origin and destination addresses
 
