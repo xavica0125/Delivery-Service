@@ -3,6 +3,9 @@ from google.maps import addressvalidation_v1, routing_v2
 from google.type import postal_address_pb2
 from google.oauth2 import service_account
 from .models import Address
+from google.protobuf.json_format import MessageToDict
+
+import json
 
 """Creates validation request and returns validation action and response from validation request. """
 
@@ -88,46 +91,37 @@ def calculate_route(origin_address, destination_address):
     origin = routing_v2.Waypoint(place_id=origin_address)
     destination = routing_v2.Waypoint(place_id=destination_address)
 
-    request = routing_v2.ComputeRoutesRequest(origin=origin, destination=destination)
+    request = routing_v2.ComputeRoutesRequest(
+        origin=origin,
+        destination=destination,
+        routing_preference=2,
+        compute_alternative_routes=True,
+        units=2,
+        extra_computations=[1, 2, 3],
+    )
 
     response = client.compute_routes(
         request=request,
         metadata=[
             (
                 "x-goog-fieldmask",
-                "routes.localized_values,routes.polyline.encoded_polyline",
+                "routes.polyline,routes.travelAdvisory,routes.legs.travelAdvisory,routes.duration,routes.travelAdvisory.tollInfo,routes.legs.travelAdvisory.tollInfo,",
             )
         ],
     )
-    encoded_polyline = response.routes[0].polyline.encoded_polyline
-    distance = response.routes[0].localized_values.distance
-    return (encoded_polyline, distance)
+    print("BEGIN")
+    print(response)
+    print("END RESPONSE")
+    json_response = MessageToDict(response._pb)
+
+    return json_response
 
 
 """Retrieves addresses Place ID and coordinates for origin and destination and calls Google API to return route information."""
 
 
-def route_calculation(request):
-    origin_id = request.POST.get("pickup_address")
-    destination_id = request.POST.get("delivery_address")
+def route_calculation(originPlaceID, destinationPlaceID):
 
-    origin_address = Address.objects.get(id=origin_id)
-    destination_address = Address.objects.get(id=destination_id)
+    response = calculate_route(originPlaceID, destinationPlaceID)
 
-    origin_address_coordinates = (origin_address.latitude, origin_address.longitude)
-    destination_address_coordinates = (
-        destination_address.latitude,
-        destination_address.longitude,
-    )
-    encoded_polyline, distance = calculate_route(
-        origin_address.place_id, destination_address.place_id
-    )
-
-    route_info = [
-        encoded_polyline,
-        distance,
-        origin_address_coordinates,
-        destination_address_coordinates,
-    ]
-
-    return route_info
+    return response
