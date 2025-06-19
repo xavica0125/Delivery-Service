@@ -26,8 +26,25 @@ function initMap() {
     console.error("Directions service or renderer not initialized");
     return;
   }
-
   const [originCoords, destinationCoords] = await Promise.all([getCoordinates(originPlaceId), getCoordinates(destinationPlaceId)]);
+  /*const params = new URLSearchParams({
+    'originPlaceID' : originPlaceId,
+    'destinationPlaceID' : destinationPlaceId
+  });
+
+  
+
+  fetch(`/calculate_route/?${params.toString()}`)
+  .then(response => response.json())
+  .then(data => {
+    for(let i = 0; i < data.routes.length; i++)
+    {
+      createPolyline(data.routes[i].polyline.encodedPolyline);
+    }
+
+    console.log(data.routes.length);
+  })
+  .catch(error => console.error("Error:", error));*/
 
   // Request route directions
   directionsService
@@ -36,6 +53,10 @@ function initMap() {
       destination: { placeId: destinationPlaceId },
       travelMode: google.maps.TravelMode.DRIVING,
       provideRouteAlternatives: true,
+      drivingOptions : {
+        trafficModel : 'bestguess',
+        departureTime : new Date()
+      }
     })
     .then((response) => {
       createMarker(originCoords, "green");
@@ -47,6 +68,19 @@ function initMap() {
     .catch((error) => {
       console.error("Error fetching route directions:", error);
     });
+}
+
+function createPolyline(encodedPolyline) {
+  const decodedPath = google.maps.geometry.encoding.decodePath(encodedPolyline);
+
+  const polyline = new google.maps.Polyline({
+    path: decodedPath,
+    strokeColor: "#0066CC",
+    strokeOpacity: 1.0,
+    strokeWeight: 4,
+  });
+
+  polyline.setMap(map);
 }
 
 // Make custom marker elements to display alongside route
