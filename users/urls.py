@@ -40,4 +40,5 @@ urlpatterns = [
         ),
         name="password_reset_confirm",
     ),
+    path("calculate_route/", views.calculate_routes, name="calculate_route"),
 ]

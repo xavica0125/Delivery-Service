@@ -12,7 +12,8 @@ from .models import *
 from django.contrib.auth.decorators import login_required
 from django_htmx.http import retarget, HttpResponseClientRedirect, reswap
 from .utils import *
-import decimal
+import decimal, json
+from django.http import JsonResponse
 
 """Registration view that validates the form and saves the user to the database"""
 
@@ -218,3 +219,12 @@ def contact_options(request):
         "delivery_address": delivery_address,
     }
     return render(request, "contact_options.html", context)
+
+
+@login_required(login_url="/")
+def calculate_routes(request):
+    pickup_address_id = request.GET.get("originPlaceID")
+    delivery_address_id = request.GET.get("destinationPlaceID")
+
+    routes = calculate_route(pickup_address_id, delivery_address_id)
+    return JsonResponse(routes)
