@@ -41,7 +41,7 @@ function initMap() {
       createMarker(originCoords, "green", "origin");
       createMarker(destinationCoords, "red", "destination");
       directionsRenderer.setDirections(response);
-      directionsRenderer.setRouteIndex(1);
+      //directionsRenderer.setRouteIndex(1);  Sets alternative route if there are any
       
     })
     .catch((error) => {
