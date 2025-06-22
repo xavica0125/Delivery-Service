@@ -77,7 +77,7 @@ function createMarker(coords, color, markerType) {
 
   const marker = new google.maps.marker.AdvancedMarkerElement({
     map : map,
-    position : coords,
+    position : {lat : coords[0], lng : coords[1]},
     content : pin.element
   });
 
