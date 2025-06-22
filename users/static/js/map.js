@@ -86,14 +86,12 @@ function createMarker(coords, color, markerType) {
 
 // Utilize Google Maps Geocoding to get coordinates to origin and destination addresses
 
-async function getCoordinates(placeId) {
-  const geocoder = new google.maps.Geocoder();
-  
-  const geocodeResponse = await geocoder.geocode({
-    placeId : placeId
-  });
+async function getCoordinates(address) {
+  let coordinates = []
+  coordinates.push(parseFloat(document.getElementById(address).selectedOptions[0].dataset.latitude));
+  coordinates.push(parseFloat(document.getElementById(address).selectedOptions[0].dataset.longitude)); 
 
-  return geocodeResponse.results[0]["geometry"]["location"];
+  return coordinates;
 }
 
 // Handle HTMX afterRequest event
