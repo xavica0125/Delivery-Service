@@ -2,7 +2,7 @@
 let map;
 let directionsService;
 let directionsRenderer;
-
+let oldMarkers = [];
 // Initialize the map
 function initMap() {
   // Create the map instance
@@ -27,7 +27,17 @@ function initMap() {
     return;
   }
 
-  const [originCoords, destinationCoords] = await Promise.all([getCoordinates(originPlaceId), getCoordinates(destinationPlaceId)]);
+  if(oldMarkers.length > 0) // Remove currently visible markers from map
+  {
+    for(let i = 0; i < oldMarkers.length; i++)
+    {
+      oldMarkers[i].map = null;
+    };
+  }
+
+  oldMarkers = [];
+
+  const [originCoords, destinationCoords] = await Promise.all([getCoordinates("pickup_address"), getCoordinates("delivery_address")]);
 
   // Request route directions
   directionsService
@@ -81,6 +91,7 @@ function createMarker(coords, color, markerType) {
     content : pin.element
   });
 
+  oldMarkers.push(marker);
 }
 
 
