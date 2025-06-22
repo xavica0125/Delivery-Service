@@ -320,10 +320,12 @@ class CustomSelectWithAttributes(forms.Select):
 
         if value:
             option["attrs"]["data-placeid"] = value.instance.place_id
+            option["attrs"]["data-longitude"] = value.instance.longitude
+            option["attrs"]["data-latitude"] = value.instance.latitude
         return option
 
 
-"""Order model form """
+"""Order model form"""
 
 
 class CreateOrderForm(forms.ModelForm):
