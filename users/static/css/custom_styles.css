@@ -3,3 +3,9 @@
     color: #6c757d;  /* Gray text color */
     border-color: #ced4da;  /* Gray border */
 }
+
+.custom-tooltip {
+  --bs-tooltip-bg: var(--bs-gray-700);
+  --bs-tooltip-color: var(--bs-white);
+}
+

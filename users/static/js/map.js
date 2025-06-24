@@ -153,10 +153,16 @@ function swapValues()
     handleMapRouting();
 }
 
+function initializeTooltip() {
+  const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+  const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+}
+
 // Initialize everything
 function initialize() {
   initMap(); 
   setupEventListeners();
+  initializeTooltip();
 }
 
 window.initMap = initialize;
