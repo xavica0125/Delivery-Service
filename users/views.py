@@ -171,11 +171,13 @@ def create_delivery(request):
             return render(request, "create_delivery.html", {"form": form})
     else:
         form = CreateOrderForm(user=request.user.id)
+        temp_form = CreateTempReferenceNumberForm()
         return render(
             request,
             "create_delivery.html",
             {
                 "form": form,
+                "temp_form": temp_form,
                 "placeIDs": list(
                     Customer.objects.get(user_id=request.user.id).addresses.values()
                 ),
