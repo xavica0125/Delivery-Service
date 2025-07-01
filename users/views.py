@@ -219,10 +219,3 @@ def contact_options(request):
         "delivery_address": delivery_address,
     }
     return render(request, "contact_options.html", context)
-
-
-@login_required(login_url="/")
-def create_reference_number(request):
-    form = CreateTempReferenceNumberForm()
-    context = {"form": form}
-    return render(request, "partials/reference_number_form.html", context)
