@@ -10,11 +10,14 @@ function referenceNumberAdded() {
 
 function addNumberToList(referenceNumber) {
     let referenceNumberList = document.getElementById("reference-number-list");
-    const listItem = document.createElement("li");
-    const listItemContent = document.createTextNode(referenceNumber.value);
-    listItem.appendChild(listItemContent);
+    if(referenceNumberList.childElementCount === 0)
+    {
+        let referenceNumbersDiv = document.getElementById("reference-numbers-div");
+        referenceNumbersDiv.setAttribute("class", "mb-3");
+        referenceNumbersDiv.removeAttribute("hidden");
 
-    referenceNumberList.appendChild(listItem);
+    }
+    referenceNumberList.innerHTML += `<li class="list-group-item">${referenceNumber.value}</li>`;
     
     referenceNumber.value = "";
 }

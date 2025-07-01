@@ -3,8 +3,7 @@
 <div class="container-fluid" style="min-height: 1000px;">
     <div class="shadow p-4 mb-5 bg-body rounded">
 
-        <div class="row" hx-get="{% url 'create_reference_number' %}"
-            hx-trigger="load" hx-target="#reference-number-form">
+        <div class="row">
 
             <div class="col-6 d-flex justify-content-center align-items-center"
                 id="order-information">
@@ -14,8 +13,14 @@
                     {% load crispy_forms_tags %}
                     {% csrf_token %}
                     {% crispy form %}
-                    <div id="reference-number-list"></div>
-                    <div id="reference-number-form">
+                    <div id="reference-numbers-div" hidden>
+                        Reference Numbers Added:
+                        <ul class="list-group list-group-flush"
+                            id="reference-number-list">
+                        </ul>
+                    </div>
+                    <div>
+                        {% include "partials/reference_number_form.html" %}
                     </div>
                 </div>
             </div>
