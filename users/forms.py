@@ -358,9 +358,9 @@ class CreateOrderForm(forms.ModelForm):
         widget=forms.RadioSelect(attrs={"class": "col form-check form-switch"}),
         label="",
     )
-    customer_order_reference = forms.CharField(
+    """customer_order_reference = forms.CharField(
         max_length=50, label="Enter reference number"
-    )
+    )"""
 
     class Meta:
         model = Order
@@ -372,7 +372,6 @@ class CreateOrderForm(forms.ModelForm):
             "content",
             "contact",
             "customer",
-            "customer_order_reference",
         )
 
     def __init__(self, *args, user=None, **kwargs):
@@ -472,23 +471,6 @@ class CreateOrderForm(forms.ModelForm):
                     Div("shipment_length", css_class="form-check form-switch"),
                     css_class="row mb-3",
                 ),
-                Div(
-                    Div(FloatingField("customer_order_reference")),
-                    css_class="row mb-3",
-                ),
-                ButtonHolder(
-                    Submit(
-                        "submit",
-                        "Review Order",
-                        **{
-                            "hx-post": reverse_lazy("create_delivery"),
-                            "hx-target": "#order-information",
-                            "hx-trigger": "click",
-                            "hx-swap": "innerHTML",
-                        },
-                    ),
-                    css_class="d-grid gap-2 d-md-flex justify-content-md-end",
-                ),
             )
         )
 
@@ -500,6 +482,28 @@ class CreateOrderForm(forms.ModelForm):
             )
 
         return cleaned_data
+
+
+class CreateTempReferenceNumberForm(forms.Form):
+    customer_order_reference = forms.CharField(
+        max_length=50, label="Enter reference number"
+    )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper(self)
+        self.helper.layout = Layout(
+            Div(FloatingField("customer_order_reference")),
+            ButtonHolder(
+                Button(
+                    "button",
+                    "Add reference number",
+                    css_id="add-reference-number-button",
+                    css_class="btn btn-primary",
+                ),
+                css_class="d-grid gap-2 d-md-flex justify-content-md-end",
+            ),
+        )
 
 
 class ContactForm(forms.ModelForm):

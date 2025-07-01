@@ -40,4 +40,9 @@ urlpatterns = [
         ),
         name="password_reset_confirm",
     ),
+    path(
+        "create_reference_number/",
+        views.create_reference_number,
+        name="create_reference_number",
+    ),
 ]
