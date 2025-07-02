@@ -3,7 +3,7 @@ let listItemCounter = 0;
 function referenceNumberAdded() {
     let addReferenceNumberButton = document.getElementById("add-reference-number-button");
     addReferenceNumberButton.addEventListener("click", function() {
-        let referenceNumber = document.getElementById("id_customer_order_reference");
+        const referenceNumber = document.getElementById("id_customer_order_reference");
         addNumberToList(referenceNumber);
     });
     
