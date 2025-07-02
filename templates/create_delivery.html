@@ -14,7 +14,9 @@
                     {% csrf_token %}
                     {% crispy form %}
                     <div id="reference-numbers-div" class="mb-3" hidden>
-                        Reference Numbers Added:
+                        <div
+                            class="fs-4 fw-medium">Reference
+                            Numbers Added:</div>
                         <ul class="list-group list-group-flush"
                             id="reference-number-list">
                         </ul>
