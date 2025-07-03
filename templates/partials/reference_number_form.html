@@ -1,7 +1,13 @@
 {% block content %}
 
-{% load crispy_forms_tags %}
-{% csrf_token %}
-{% crispy temp_form %}
+<div class="form-floating mb-3">
+    <input class="form-control" id="reference-number-input"
+        placeholder="reference-number">
+    <label for="floatingInput">Enter reference number</label>
+</div>
+<div class="d-grid gap-2 d-md-flex justify-content-md-end">
+    <button type="button" class="btn btn-primary"
+        id="add-reference-number-button">Add reference number</button>
+</div>
 
 {% endblock %}

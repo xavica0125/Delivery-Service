@@ -384,6 +384,7 @@ class CreateOrderForm(forms.ModelForm):
         self.fields["delivery_address"].queryset = all_user_addresses
 
         self.helper = FormHelper(self)
+        self.helper.form_id = "create-delivery-form"
         self.helper.form_action = reverse_lazy("create_delivery")
         self.helper.layout = Layout(
             Div(
@@ -482,28 +483,6 @@ class CreateOrderForm(forms.ModelForm):
             )
 
         return cleaned_data
-
-
-class CreateTempReferenceNumberForm(forms.Form):
-    customer_order_reference = forms.CharField(
-        max_length=50, label="Enter reference number"
-    )
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.helper = FormHelper(self)
-        self.helper.layout = Layout(
-            Div(FloatingField("customer_order_reference")),
-            ButtonHolder(
-                Button(
-                    "button",
-                    "Add reference number",
-                    css_id="add-reference-number-button",
-                    css_class="btn btn-primary",
-                ),
-                css_class="d-grid gap-2 d-md-flex justify-content-md-end",
-            ),
-        )
 
 
 class ContactForm(forms.ModelForm):

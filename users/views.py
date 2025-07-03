@@ -7,7 +7,6 @@ from .forms import (
     LoginForm,
     CreateOrderForm,
     ContactForm,
-    CreateTempReferenceNumberForm,
 )
 from .models import *
 from django.contrib.auth.decorators import login_required
@@ -147,6 +146,8 @@ def create_delivery(request):
     if request.method == "POST":
         form = CreateOrderForm(request.POST, user=request.user.id)
         if form.is_valid():
+            ref_list = request.POST.get("reference-number-list")
+            print(ref_list)
             order_instance = form.save(commit=False)
             route_calculation_response = route_calculation(request)
             distance = route_calculation_response[1]
@@ -171,13 +172,11 @@ def create_delivery(request):
             return render(request, "create_delivery.html", {"form": form})
     else:
         form = CreateOrderForm(user=request.user.id)
-        temp_form = CreateTempReferenceNumberForm()
         return render(
             request,
             "create_delivery.html",
             {
                 "form": form,
-                "temp_form": temp_form,
                 "placeIDs": list(
                     Customer.objects.get(user_id=request.user.id).addresses.values()
                 ),
