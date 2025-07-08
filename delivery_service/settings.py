@@ -17,7 +17,7 @@ from dotenv import load_dotenv
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-load_dotenv("/workspaces/Delivery-Service/.env")
+load_dotenv("/workspaces/uvconfig/Delivery-Service/.env")
 MAPS_KEY = os.getenv("MAPS_KEY")
 GOOGLE_SERVICE_ACCOUNT_KEY = os.getenv("GOOGLE_SERVICE_ACCOUNT_KEY")
 EIA_KEY = os.getenv("EIA_KEY")
@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     "phonenumber_field",
     "djmoney",
     "django_celery_beat",
+    "django_extensions",
 ]
 
 MIDDLEWARE = [
