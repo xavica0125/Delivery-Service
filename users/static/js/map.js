@@ -133,7 +133,7 @@ function setupEventListeners() {
   
 }
 
-function swapValues()
+function swapValues() // TODO: check for both fields having a value else do not call the directions service 
 {
     let pickup_address = document.getElementById("pickup_address").value; //DO NOT FORGET, I moved pickup and delivery address inside swapValues function to update it everytime the values are changed
     let delivery_address = document.getElementById("delivery_address").value;
