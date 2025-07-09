@@ -35,6 +35,36 @@ function addNumberToList(referenceNumber) {
     referenceNumber.value = "";
 }
 
+function formSubmittal() {
+    let submitButton = document.getElementById("submit-button");
+    submitButton.addEventListener("click", function() {
+        const listItemValues = JSON.stringify(extractRefNumberValues());
+        const deliveryForm = document.getElementById("create-delivery-form");
+        let formData = new FormData(deliveryForm);
+        formData.append("jsonRefValues", listItemValues);
+        htmx.ajax('POST', '/create_delivery/', {
+            target : "#order-information",
+            values : formData
+        });
+    });
+
+
+    
+}
+
+function extractRefNumberValues() {
+    const listItems = document.querySelectorAll("#reference-number-list li");
+    let listItemValues = [];
+
+    listItems.forEach(item => {
+        listItemValues.push(item.firstElementChild.innerText);
+    });
+
+    return listItemValues;
+}
+
+
 setTimeout(function() {
   referenceNumberAdded();
+  formSubmittal();
 }, 2000);
