@@ -6,5 +6,5 @@ migrations
 service_account.json
 /workspaces/Delivery-Service/delivery-service/users/test.json
 /workspaces/Delivery-Service/delivery-service/credentials
-dump.rdb
 google-cloud-sdk
+dump.rdb
