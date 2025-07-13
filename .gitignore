@@ -8,3 +8,4 @@ service_account.json
 /workspaces/Delivery-Service/delivery-service/credentials
 google-cloud-sdk
 dump.rdb
+.venv
