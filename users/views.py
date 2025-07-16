@@ -176,12 +176,7 @@ def create_delivery(request):
         return render(
             request,
             "create_delivery.html",
-            {
-                "form": form,
-                "placeIDs": list(
-                    Customer.objects.get(user_id=request.user.id).addresses.values()
-                ),
-            },
+            {"form": form},
         )
 
 
