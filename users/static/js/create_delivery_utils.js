@@ -1,3 +1,4 @@
+import {distance} from './map.js'
 let listItemCounter = 0;
 
 function referenceNumberAdded() {
@@ -42,6 +43,7 @@ function formSubmittal() {
         const deliveryForm = document.getElementById("create-delivery-form");
         let formData = new FormData(deliveryForm);
         formData.append("jsonRefValues", listItemValues);
+        formData.append("distance", distance);
         htmx.ajax('POST', '/create_delivery/', {
             target : "#order-information",
             values : formData

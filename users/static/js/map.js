@@ -3,6 +3,8 @@ let map;
 let directionsService;
 let directionsRenderer;
 let oldMarkers = [];
+let distance;
+export {distance};
 // Initialize the map
 function initMap() {
   // Create the map instance
@@ -48,6 +50,7 @@ function initMap() {
       provideRouteAlternatives: true,
     })
     .then((response) => {
+      distance = response.routes[0].legs[0].distance.value;
       createMarker(originCoords, "green", "origin");
       createMarker(destinationCoords, "red", "destination");
       directionsRenderer.setDirections(response);
