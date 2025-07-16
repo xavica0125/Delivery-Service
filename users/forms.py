@@ -484,6 +484,16 @@ class CreateOrderForm(forms.ModelForm):
 
         return cleaned_data
 
+    def save(self, distance=None, customer=None, commit=True):
+        instance = super().save(commit=False)
+        instance.customer = Customer.objects.get(user=customer)
+        instance.total_amount = instance.calculate_price(
+            distance, self.cleaned_data.get("shipment_length")
+        )
+
+        instance.save()
+        return instance
+
 
 class ContactForm(forms.ModelForm):
     contact_name = forms.CharField(

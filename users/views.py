@@ -145,28 +145,16 @@ def customer_home(request):
 def create_delivery(request):
     if request.method == "POST":
         form = CreateOrderForm(request.POST, user=request.user.id)
-        print("before validity check")
         if form.is_valid():
-            print("after validity check")
             ref_list = request.POST.get("jsonRefValues")
-            print(ref_list)
-            order_instance = form.save(commit=False)
-            route_calculation_response = route_calculation(request)
-            distance = route_calculation_response[1]
-            order_instance.total_amount = order_instance.calculate_price(
-                distance, request.POST.get("shipment_length")
-            )
-            order_instance.order_status = "Pending"
-            order_instance.customer = Customer.objects.get(user_id=request.user.id)
-            order_instance.save()
+            distance = request.POST.get("distance")
+            order_instance = form.save(distance, request.user.id)
+ 
             tax = f"{order_instance.total_amount * (Decimal(8.25) / 100):,.2f}"
             context = {
-                "polyline": route_calculation_response[0],
-                "origin_address_coordinates": route_calculation_response[2],
-                "destination_address_coordinates": route_calculation_response[3],
                 "order_price": f"{order_instance.total_amount:,.2f}",
                 "tax": tax,
-                "final_price": f"{order_instance.total_amount + Decimal(8.25):,.2f}",
+                "final_price": f"{order_instance.total_amount + tax:,.2f}",
             }
             return render(request, "calculate_price.html", context)
         else:

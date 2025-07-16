@@ -110,7 +110,9 @@ class Order(models.Model):
     time_picked_up = models.DateTimeField(null=True)
     time_delivered = models.DateTimeField(null=True)
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, blank=True)
-    order_status = models.CharField(max_length=15, choices=Status)
+    order_status = models.CharField(
+        max_length=15, choices=Status, default=Status.PENDING
+    )
     reason_for_refusal = models.TextField(max_length=200, blank=True, null=True)
     pickup_address = models.ForeignKey(
         Address, on_delete=models.SET_NULL, null=True, related_name="pickup_orders"
@@ -119,11 +121,10 @@ class Order(models.Model):
         Address, on_delete=models.SET_NULL, null=True, related_name="delivery_orders"
     )
     contact = models.ForeignKey("Contact", on_delete=models.CASCADE)
-    customer_order_reference = models.CharField(max_length=50)
 
     def calculate_price(self, distance, length: bool):
         fuel_price_object = FuelPrice.objects.latest("date_created")
-        distance = Decimal(str(distance)[7:10])
+        distance = Decimal(float(distance) * 0.000621371)
         time_window_price = self.get_time_window_price()
         total_price = None
 
