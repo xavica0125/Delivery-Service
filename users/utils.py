@@ -2,7 +2,7 @@ from django.conf import settings
 from google.maps import addressvalidation_v1, routing_v2
 from google.type import postal_address_pb2
 from google.oauth2 import service_account
-from .models import Address
+from .models import Address, ReferenceNumber
 
 """Creates validation request and returns validation action and response from validation request. """
 
@@ -131,3 +131,9 @@ def route_calculation(request):
     ]
 
     return route_info
+
+
+def add_reference_values(reference_number_list, order_instance):
+    for i in range(len(reference_number_list)):
+        ReferenceNumber.objects.create(ref_number=reference_number_list[i], order=order_instance)
+    
