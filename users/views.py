@@ -13,6 +13,7 @@ from django.contrib.auth.decorators import login_required
 from django_htmx.http import retarget, HttpResponseClientRedirect, reswap
 from .utils import *
 import decimal
+import json
 
 """Registration view that validates the form and saves the user to the database"""
 
@@ -146,15 +147,16 @@ def create_delivery(request):
     if request.method == "POST":
         form = CreateOrderForm(request.POST, user=request.user.id)
         if form.is_valid():
-            ref_list = request.POST.get("jsonRefValues")
+            ref_list = json.loads(request.POST.get("jsonRefValues"))
             distance = request.POST.get("distance")
+            print(type(ref_list))
             order_instance = form.save(distance, request.user.id)
- 
+            add_reference_values(ref_list, order_instance)
             tax = f"{order_instance.total_amount * (Decimal(8.25) / 100):,.2f}"
             context = {
                 "order_price": f"{order_instance.total_amount:,.2f}",
                 "tax": tax,
-                "final_price": f"{order_instance.total_amount + tax:,.2f}",
+                "final_price": f"{order_instance.total_amount + Decimal(tax):,.2f}",
             }
             return render(request, "calculate_price.html", context)
         else:
