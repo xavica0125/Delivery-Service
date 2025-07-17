@@ -182,7 +182,7 @@ class Order(models.Model):
 
 
 class ReferenceNumber(models.Model):
-    ref_number = models.PositiveBigIntegerField()
+    ref_number = models.CharField(max_length=50)
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
 
 
