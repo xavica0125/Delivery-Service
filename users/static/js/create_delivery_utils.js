@@ -55,17 +55,10 @@ function formSubmittal() {
 
 function orderConfirmationButtons() {
 
-    let editDeliveryButton = document.getElementById("edit-delivery-button");
-    let finalizeOrderButton = document.getElementById("confirm-delivery-button");
+    let confirmDeliveryButton = document.getElementById("confirm-delivery-button");
 
-    editDeliveryButton.addEventListener("click", function() {
-        htmx.ajax('PUT', "/create_delivery/", {
-            target : "#order-information"
-        });
-    });
-
-    finalizeOrderButton.addEventListener("click", function() {
-        htmx.ajax('GET', "/home/");
+    confirmDeliveryButton.addEventListener("click", function() {
+        window.location.href = "/home/";
     });
 }
 
