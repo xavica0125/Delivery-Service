@@ -149,11 +149,11 @@ def create_delivery(request):
         if form.is_valid():
             ref_list = json.loads(request.POST.get("jsonRefValues"))
             distance = request.POST.get("distance")
-            print(type(ref_list))
             order_instance = form.save(distance, request.user.id)
             add_reference_values(ref_list, order_instance)
             tax = f"{order_instance.total_amount * (Decimal(8.25) / 100):,.2f}"
             context = {
+                "order_instance": order_instance,
                 "order_price": f"{order_instance.total_amount:,.2f}",
                 "tax": tax,
                 "final_price": f"{order_instance.total_amount + Decimal(tax):,.2f}",

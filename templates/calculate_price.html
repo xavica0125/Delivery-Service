@@ -1,18 +1,27 @@
+{% block content %}
+
 <div class="container d-flex justify-content-center align-items-center">
     <div class="row">
         <div class="col text-center">
             <h1>Confirm your delivery:</h1>
         </div>
-    <div class="row">
+        <div class="row">
             <p class="col text-center">Delivery: <b>${{ order_price }}</b></p>
-    </div>
-    <div class="row">
+        </div>
+        <div class="row">
             <p class="col text-center">Tax (8.25%): <b>${{ tax }}</b></p>
-    </div>
-    <div class="row">
-        <p class="col text-center"><b>Total: ${{ final_price }}</b></p>
+        </div>
+        <div class="row">
+            <p class="col text-center"><b>Total: ${{ final_price }}</b></p>
 
+        </div>
+        <div class="d-flex justify-content-end">
+            <button class="btn btn-primary" type="button"
+                id="edit-delivery-button">Edit Delivery</button>
+            <button class="btn btn-success" type="button"
+                id="confirm-delivery-button">Confirm
+                Delivery</button>
+        </div>
     </div>
-        
-    </div>
-</div>
+
+    {% endblock %}
