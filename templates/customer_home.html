@@ -10,16 +10,23 @@
     <div class="row">
         <div class="col-6">
             <h2> Your recent deliveries: </h2>
-            <ul> 1 </ul>
-            <ul> 2 </ul>
-            <ul> 3 </ul>
+            {% if recent_order_list|length > 0 %}
+            {% for order in recent_order_list %}
+            <li> {{ order.get_display_string }} </li>
+            {% endfor %}
+            {% else %}
+            <span>No recent orders to display.</span>
+            {% endif %}
+
         </div>
         <div class="col-6 text-start fs-1">
             <ul>
                 <a href="{% url 'create_delivery' %}" class="link-offset-2">
                     Place Delivery </a>
             </ul>
-            <ul> View Deliveries </ul>
+            <ul> <a href="{% url 'view_deliveries' %}?page=1"
+                    class="link-offset-2">View
+                    Deliveries</a></ul>
             <ul> Make A Payment </ul>
         </div>
     </div>
