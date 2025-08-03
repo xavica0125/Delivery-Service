@@ -177,6 +177,10 @@ class Order(models.Model):
                 time_window_price = Decimal(15.00)
         return time_window_price
 
+    @property
+    def get_display_string(self):
+        return f"{self.pickup_address.location_name} -> {self.delivery_address.location_name} ({self.time_window}) ({self.order_status})"
+
 
 """Model that stores reference numbers used by customers and are associated via foreign key with the Order model's primary key."""
 
