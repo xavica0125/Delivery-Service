@@ -9,6 +9,7 @@ from .forms import (
     ContactForm,
 )
 from .models import *
+from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
 from django_htmx.http import retarget, HttpResponseClientRedirect, reswap
 from .utils import *
@@ -136,10 +137,11 @@ def logout(request):
 
 @login_required(login_url="/")
 def customer_home(request):
-    print(request.user.id)
-    print(request.user.is_authenticated)
-    # get_fuel_prices()
-    return render(request, "customer_home.html", {})
+    recent_order_list = retrieve_orders(request.user.id, "recent")
+
+    return render(
+        request, "customer_home.html", {"recent_order_list": recent_order_list}
+    )
 
 
 @login_required(login_url="/")
@@ -206,3 +208,31 @@ def contact_options(request):
         "delivery_address": delivery_address,
     }
     return render(request, "contact_options.html", context)
+
+
+@login_required(login_url="/")
+def view_deliveries(request):
+    if request.method == "GET":
+        order_list = retrieve_orders(request.user.id)
+        paginator = Paginator(order_list, 25)
+        requested_page = request.GET.get("page")
+        is_end = False
+        if paginator.num_pages == int(requested_page):
+            is_end = True
+        try:
+            page_obj = paginator.get_page(int(requested_page))
+        except ValueError:
+            return render(request, "view_deliveries.html", {"order_list": []})
+        else:
+            if request.htmx:
+                return render(
+                    request,
+                    "partials/load_more_orders.html",
+                    {"continued_order_list": page_obj, "is_end": is_end},
+                )
+            else:
+                return render(
+                    request,
+                    "view_deliveries.html",
+                    {"order_list": page_obj, "is_end": is_end},
+                )

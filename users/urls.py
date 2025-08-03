@@ -40,4 +40,5 @@ urlpatterns = [
         ),
         name="password_reset_confirm",
     ),
+    path("view_deliveries/", views.view_deliveries, name="view_deliveries"),
 ]
