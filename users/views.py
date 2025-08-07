@@ -236,3 +236,11 @@ def view_deliveries(request):
                     "view_deliveries.html",
                     {"order_list": page_obj, "is_end": is_end},
                 )
+
+
+@login_required(login_url="/")
+def delivery_details(request):
+    if request.method == "GET":
+        delivery_control_number = request.GET.get("control_number")
+        delivery_instance = Order.objects.get(control_number=delivery_control_number)
+        return render(request, "view_order.html", {})
