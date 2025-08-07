@@ -1,7 +1,7 @@
 {% if continued_order_list %}
 {% for order in continued_order_list %}
 
-<tr>
+<tr data-control-number="{{ order.control_number }}" hx-preserve>
     <td>{{order.control_number}}</td>
     <td>{{order.pickup_address}}</td>
     <td>{{order.delivery_address}}</td>
