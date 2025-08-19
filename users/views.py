@@ -11,7 +11,7 @@ from .forms import (
 from .models import *
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
-from django_htmx.http import retarget, HttpResponseClientRedirect, reswap
+from django_htmx.http import retarget, HttpResponseClientRedirect, reswap, push_url
 from .utils import *
 import decimal
 import json
@@ -243,6 +243,9 @@ def delivery_details(request):
     if request.method == "GET":
         delivery_control_number = request.GET.get("control_number")
         delivery_instance = Order.objects.get(control_number=delivery_control_number)
-        return render(
+        response = render(
             request, "view_order.html", {"delivery_instance": delivery_instance}
         )
+        return push_url(
+            response, f"/delivery/details/?control_number={delivery_control_number}"
+        ) # Return delivery details along with updating URL history to be able to return back to previous table state

@@ -15,11 +15,7 @@
         {% if order_list|length > 0 %}
         {% for order in order_list %}
             <tr
-            data-control-number="{{ order.control_number }}"
-            hx-push-url="/delivery_details/?control_number={{order.control_number}}"
-            hx-get="{% url 'delivery_details' %}"
-            hx-target="#ordersTable"
-            hx-vals='{"control_number" : "{{order.control_number}}"}'>
+            data-control-number="{{ order.control_number }}">
             <td>{{order.control_number}}</td>
             <td>{{order.pickup_address}}</td>
             <td>{{order.delivery_address}}</td>
