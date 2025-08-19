@@ -5,9 +5,14 @@ function getDeliveryDetails() {
         const clickedRow = e.target.closest("tr");
         if(clickedRow && clickedRow.id != "replaceMe")
         {
-            window.location.href = `/delivery_details/?control_number=${clickedRow.dataset.controlNumber}`;
+            //window.location.href = `/delivery_details/?control_number=${clickedRow.dataset.controlNumber}`;
+
+            htmx.ajax('GET', '/delivery_details/', {
+                "target" : "#ordersTable",
+                "values" : {"control_number" : clickedRow.dataset.controlNumber}
+            });
         }
     })
 }
 
-getDeliveryDetails();
+//getDeliveryDetails();
