@@ -47,11 +47,15 @@
         </li>
       </ul>
       {% if  request.resolver_match.url_name == 'view_deliveries' %}
-        <form class="d-flex" role="search">
-            <input class="form-control me-2" type="search" placeholder="Search"
-                aria-label="Search">
-            <button class="btn btn-outline-success" type="submit">Search</button>
-        </form>
+      <div class="d-flex">      
+      <input id="search-bar" class="form-control me-2" type="search" name="search" placeholder="Search"
+                aria-label="Search" hx-post="{% url 'search_deliveries' %}"
+                hx-trigger="input changed delay:500ms, keyup[key=='Enter']"
+       hx-target="#search-results"
+       hx-indicator=".htmx-indicator">
+      </div>
+      <script type="module" src="/static/js/search_deliveries.js"></script>
+
       {% endif %}
       </div>
     </div>
