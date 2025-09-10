@@ -21,7 +21,7 @@
 {% else %}
 <tr id="replaceMe">
     <td colspan="3">
-        <button class='btn btn-primary'
+        <button class='btn btn-primary' id="load-more-button"
             hx-get="/view_deliveries/?page={{ order_list.next_page_number }}"
             hx-target="#replaceMe"
             hx-swap="outerHTML">

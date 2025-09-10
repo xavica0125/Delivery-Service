@@ -22,7 +22,10 @@ function restoreTableState() {
 
             const ordersTable = document.getElementById("ordersTable");
 
-            ordersTable.innerHTML = localStorage.getItem("ordersTable");
+            ordersTable.outerHTML = localStorage.getItem("ordersTable");
+
+            let loadMoreButton = document.getElementById("load-more-button");
+            htmx.process(loadMoreButton);
         }
     
     });
