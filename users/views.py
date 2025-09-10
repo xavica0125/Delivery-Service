@@ -13,6 +13,8 @@ from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
 from django_htmx.http import retarget, HttpResponseClientRedirect, reswap, push_url
 from .utils import *
+from django.db.models import Q, CharField
+from django.db.models.functions import Cast
 import decimal
 import json
 
@@ -248,4 +250,24 @@ def delivery_details(request):
         )
         return push_url(
             response, f"/delivery/details/?control_number={delivery_control_number}"
-        ) # Return delivery details along with updating URL history to be able to return back to previous table state
+        )  # Return delivery details along with updating URL history to be able to return back to previous table state
+
+
+@login_required(login_url="/")
+def search_deliveries(request):
+    if request.method == "POST":
+        search_string = request.POST.get("search")
+        print(search_string)
+
+        search_queryset = Order.objects.annotate(
+            ref_num=Cast("control_number", CharField()),
+        ).filter(
+            Q(time_created_string__icontains=search_string)
+            | Q(ref_num__icontains=search_string)
+            | Q(delivery_address__full_address__icontains=search_string)
+            | Q(pickup_address__full_address__icontains=search_string)
+        )
+
+        return render(
+            request, "partials/search_results.html", {"search_results": search_queryset}
+        )

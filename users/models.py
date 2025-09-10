@@ -40,6 +40,7 @@ class Address(models.Model):
     latitude = models.CharField(max_length=50)
     longitude = models.CharField(max_length=50)
     place_id = models.CharField(max_length=50)
+    full_address = models.CharField(max_length=150, blank=True)
 
     def __str__(self):
         return f"{self.street_address} {self.sub_premise}, {self.city}, {self.state} {self.zip_code} ({self.location_name})"
@@ -107,6 +108,7 @@ class Order(models.Model):
     content = models.TextField(max_length=500)
     total_amount = models.DecimalField(max_digits=19, decimal_places=4)
     time_created = models.DateTimeField(auto_now_add=True)
+    time_created_string = models.CharField(max_length=50, blank=True)
     time_picked_up = models.DateTimeField(null=True)
     time_delivered = models.DateTimeField(null=True)
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, blank=True)
@@ -180,6 +182,12 @@ class Order(models.Model):
     @property
     def get_display_string(self):
         return f"{self.pickup_address.location_name} -> {self.delivery_address.location_name} ({self.time_window}) ({self.order_status})"
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        if self.time_created and not self.time_created_string:
+            self.time_created_string = self.time_created.strftime("%B %d, %Y, %I:%M %p")
+            super().save(update_fields=["time_created_string"])  # only update string
 
 
 """Model that stores reference numbers used by customers and are associated via foreign key with the Order model's primary key."""

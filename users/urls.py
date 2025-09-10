@@ -41,5 +41,6 @@ urlpatterns = [
         name="password_reset_confirm",
     ),
     path("view_deliveries/", views.view_deliveries, name="view_deliveries"),
-    path("delivery_details/", views.delivery_details, name="delivery_details")
+    path("delivery_details/", views.delivery_details, name="delivery_details"),
+    path("search_deliveries/", views.search_deliveries, name="search_deliveries"),
 ]

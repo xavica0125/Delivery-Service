@@ -115,6 +115,7 @@ class CustomerSignUpForm(forms.ModelForm):  # TODO change name of class
             "city",
             "state",
             "zip_code",
+            "full_address",
         )
 
     def __init__(self, *args, **kwargs):
@@ -178,6 +179,12 @@ class CustomerSignUpForm(forms.ModelForm):  # TODO change name of class
         instance.place_id = self.cleaned_data.get("place_id")
         instance.latitude = self.cleaned_data.get("latitude")
         instance.longitude = self.cleaned_data.get("longitude")
+
+        instance.full_address = (
+            f"{instance.street_address} {instance.sub_premise} {instance.city}, {instance.state} {instance.zip_code} {instance.location_name}"
+            # if instance.sub_premise
+            # else f{instance.street_address} {instance.city}, {instance.state} {instance.zip_code} {instance.location_name}
+        )
 
         if commit:
             instance.save()
