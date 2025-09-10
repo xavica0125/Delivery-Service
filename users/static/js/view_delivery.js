@@ -3,7 +3,7 @@ function getDeliveryDetails() {
 
     orders_table.addEventListener("click", function(e) {
         const clickedRow = e.target.closest("tr");
-        if(clickedRow && clickedRow.id != "replaceMe")
+        if(clickedRow && clickedRow.id != "replaceMe" && clickedRow.id != "column-headers")
         {
             htmx.ajax('GET', '/delivery_details/', {
                 "target" : "#ordersTable",
