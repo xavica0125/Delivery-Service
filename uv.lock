@@ -980,6 +980,19 @@ wheels = [
 ]
 
 [[package]]
+name = "stripe"
+version = "12.5.1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "requests" },
+    { name = "typing-extensions" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/bd/92/f1b72783e13662026efc7d3f0fc201230edab55edd1604326a97162d8ce4/stripe-12.5.1.tar.gz", hash = "sha256:5407d092c355c31393e767d2dcb2d5a8c3980caa9a073acb32d0ccb3c01b04b5", size = 1432826, upload-time = "2025-09-05T13:27:07.976Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/1d/8d/f4c2f047eedc943aea573cb56af2c9481b2d97ee8de9819f8c5d87e9ba34/stripe-12.5.1-py2.py3-none-any.whl", hash = "sha256:39b47b331dfe933ce6cf6bd654e0ae9ba082caa9d1dd8d0ae9ae48293975f115", size = 1664067, upload-time = "2025-09-05T13:27:05.559Z" },
+]
+
+[[package]]
 name = "typing-extensions"
 version = "4.14.0"
 source = { registry = "https://pypi.org/simple" }
@@ -1075,6 +1088,7 @@ dependencies = [
     { name = "pylance" },
     { name = "pytz" },
     { name = "redis" },
+    { name = "stripe" },
     { name = "uv" },
 ]
 
@@ -1110,6 +1124,7 @@ requires-dist = [
     { name = "pylance", specifier = ">=0.29.0" },
     { name = "pytz", specifier = ">=2025.2" },
     { name = "redis", specifier = "==5.0.8" },
+    { name = "stripe", specifier = ">=12.5.1" },
     { name = "uv", specifier = "==0.7.12" },
 ]
 

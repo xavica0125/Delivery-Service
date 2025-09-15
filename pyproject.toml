@@ -35,5 +35,6 @@ dependencies = [
     "pylance>=0.29.0",
     "pytz>=2025.2",
     "redis==5.0.8",
+    "stripe>=12.5.1",
     "uv==0.7.12",
 ]
