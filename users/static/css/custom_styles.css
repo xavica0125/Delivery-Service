@@ -1,0 +1,21 @@
+.grayed-out {
+    background-color: #e9ecef;  /* Light gray background */
+    color: #6c757d;  /* Gray text color */
+    border-color: #ced4da;  /* Gray border */
+}
+
+.custom-tooltip {
+  --bs-tooltip-bg: var(--bs-gray-700);
+  --bs-tooltip-color: var(--bs-white);
+}
+
+.custom-delete-button {
+  --bs-btn-padding-y: .25rem;
+  --bs-btn-padding-x: .5rem;
+  --bs-btn-font-size: .75rem;
+}
+
+
+table {
+      table-layout: fixed;
+    }

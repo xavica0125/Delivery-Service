@@ -1,0 +1,32 @@
+{% if continued_order_list %}
+{% for order in continued_order_list %}
+
+<tr data-control-number="{{ order.control_number }}" hx-preserve>
+    <td>{{order.control_number}}</td>
+    <td>{{order.pickup_address}}</td>
+    <td>{{order.delivery_address}}</td>
+    <td>{{order.time_created_string}}</td>
+    <td>{{order.total_amount}}</td>
+</tr>
+{% endfor %}
+{% endif %}
+{% if is_end %}
+<tr id="replaceMe">
+    <td colspan="3">
+        <button class='btn btn-success' disabled>
+            All Caught Up!
+        </button>
+    </td>
+</tr>
+{% else %}
+<tr id="replaceMe">
+    <td colspan="3">
+        <button class='btn btn-primary' id="load-more-button"
+            hx-get="/view_deliveries/?page={{ order_list.next_page_number }}"
+            hx-target="#replaceMe"
+            hx-swap="outerHTML">
+            Load More Orders...
+        </button>
+    </td>
+</tr>
+{% endif %}

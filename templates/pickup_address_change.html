@@ -1,0 +1,12 @@
+{% block content %}
+
+{% for address in new_addresses %}
+<option value="{{ address.id }}" {% if address.id|stringformat:"s" == selected_delivery_address %}selected{% endif %}>
+    {{ address }}
+</option>
+{% endfor %}
+
+<div id="delivery_address_placeid2" style="display: none;">{{ delivery_address_placeid2 }}</div>
+<div id="pickup_address_placeid2" style="display: none;">{{ pickup_address_placeid2 }}</div>
+
+{% endblock %}

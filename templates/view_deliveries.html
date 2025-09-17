@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<table class="table table-hover" id="ordersTable" hx-history-elt>
+    <thead>
+        <tr id="column-headers">
+            <th scope="col">Control Number</th>
+            <th scope="col">Origin</th>
+            <th scope="col">Destination</th>
+            <th scope="col">Date Created</th>
+            <th scope="col">Cost</th>
+        </tr>
+    </thead>
+    <tbody id="search-results">
+        {% if order_list|length > 0 %}
+        {% for order in order_list %}
+        <tr
+            data-control-number="{{ order.control_number }}">
+            <td>{{order.control_number}}</td>
+            <td>{{order.pickup_address}}</td>
+            <td>{{order.delivery_address}}</td>
+            <td>{{order.time_created_string}}</td>
+            <td>{{order.total_amount}}
+            </tr>
+            {% endfor %}
+            {% else %}
+            <span> There are not any orders associated with this account.</span>
+            {% endif %}
+            {% include 'partials/load_more_orders.html' %}
+
+        </tbody>
+    </table>
+    <script type="module" src="/static/js/view_delivery.js"></script>
+    {% endblock %}
